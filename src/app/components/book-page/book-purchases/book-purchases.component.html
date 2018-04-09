@@ -1,0 +1,23 @@
+<div class="mt-5 mb-5">
+  
+  <div class="container">
+
+    <h2>My Books </h2>
+
+    <div class="row mx-auto">
+      <div class="card my-card col-12 col-md-3 col-lg-3 col-xl-2 p-2 mb-5 " *ngFor="let book of purchasedBooks">
+        <div class="card-img-top mx-auto m-0" [style.backgroundImage]="book.image"></div>
+        <div class="card-body pt-1 pb-0 p-md-0">
+          <p class="card-text pb-0 mb-0"><strong>Author: </strong>{{book.authors[0]}}</p>
+          <p class="card-text pt-0 mt-0 mb-0"><strong>Isbn: </strong> {{book.isbn}}</p>
+          <p class="card-text pb-0 mb-0"><strong>Price: </strong>{{book.price | currency:0}}</p>
+          <p class="card-text pb-0 mb-0"><strong>From: </strong>{{book.seller}}</p>
+          <p class="card-text pb-0 mb-4"><strong>Purchased on: </strong>{{boughtTime}}</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

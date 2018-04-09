@@ -1,0 +1,14 @@
+nav{
+    height: 50px;
+    margin: 0; 
+}
+nav i, a{
+    margin: 0 10px
+}
+.d a{
+    cursor: pointer;
+    color: rgb(59, 59, 241)!important;
+}
+a.btn:hover{
+    text-decoration: underline!important;
+}

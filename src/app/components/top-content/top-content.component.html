@@ -1,0 +1,67 @@
+<div class="wrap">
+
+  <!-- blue diagonal background -->
+  <div class="wrap-blue-diagonal">
+      <div appBgblueDiagonal class="blue-diagonal"></div>
+  </div>
+
+  <div class="title col-10 col-md-6">
+    <img src="../../../assets/title.png" alt="">
+  </div>
+
+  <div class="container hovImg-learn col-12">
+
+    <!--hovering image on the left-->
+    <div appImgWrapper class="img-wrapper col-12 col-lg-6">
+      <div class="img">
+        <img src="../../../assets/turkey.png" alt="">
+      </div>
+      <div class="img-shadow">
+        <img src="../../../assets/shadow.png" alt="">
+      </div>
+    </div>
+  
+    <!-- Small text on the right above start learning and the start learnig -->
+    <div appLearnMore class="text-group col-12 col-lg-5">
+      <div class="text">
+        <h4>Learn how to make the perfect turkey in few easy steps!</h4>
+      </div>
+  
+      <button appStartScrollAnimation class="btn btn-light btn-lg d-none d-md-block text-center button">Start Learning</button>
+    </div>
+
+  </div>
+
+
+
+
+  <!--short clip of perfect turkey video, about video words, order and watch now buttons-->
+  <div class="video-content-wrapper col-12">
+
+    <div class="video col-12 col-lg-5">
+      <video controls>
+          <source src="../../../assets/videos/snippetTurkeyVideo.mp4" type="video/mp4">
+          <source src="../../../assets/videos/snippetTurkeyVideo.webm" type="video/webm">
+          Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div appBtnWordsWrapper class="wrap-btn-words col-12 col-lg-6">
+      <div class="about-video-words">
+          <h4 class=""> 
+            &nbsp;&thinsp;&ensp;&emsp;This video will help you bake a perfect turkey each time and everytime. The best turkey you have ever eaten. This secret receipe gives your turkey an adorable smell. This secret receipe repells the bad turkey odor and replaces it with a better smell that everybody will love. Eating turkey is made possible for everybody.
+          </h4>
+      </div>
+      <br>
+      <div class="btns-group offset-2">
+        <button class="btn btn-primary btn-lg" (click)="proceedPayement(onlinePrice)">Watch Full Video</button>
+        <button class="btn btn-outline-success btn-lg" (click)="proceedPayement(dvdPrice)">Order on a DVD</button>
+      </div>
+    </div>
+    
+    <div class="amazon-affiliate">
+      <app-amazon-affiliate></app-amazon-affiliate>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Average|Gentium+Basic|Jura:700|Lustria|Nobile:400,700');
+
+.main{
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+.bg-opac{
+    position: relative;
+    padding: 2em 0;
+    min-height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.container{
+    padding: 2em 0px;
+}
+
+video{
+    position: relative;
+    box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, .4);  
+    padding: 0;   
+}
+
+h2{
+    position: relative;  
+    font-family: 'Nobile', sans-serif;
+    color: aliceblue;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);
+    font-weight: bold
+}
+
+.amazon-aff{
+    position: relative;
+}

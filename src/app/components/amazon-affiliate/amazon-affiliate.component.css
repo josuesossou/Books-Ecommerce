@@ -1,0 +1,13 @@
+.jumbotron{
+    margin: 0;
+    padding: 0;
+    margin-top: 40px;
+    background-color: rgba(0, 0, 0, 0);
+}
+.row .d{
+    border: 3px groove rgba(0, 0, 0, .6);
+    margin: 0;
+}
+.d a{
+    border: 1px solid rgba(0, 0, 0, .4)
+}

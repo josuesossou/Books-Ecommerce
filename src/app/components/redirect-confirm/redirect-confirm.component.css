@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Average|Gentium+Basic|Jura:700|Lustria|Nobile:400,700');
+
+.wrap{
+    width: 100%;
+    height: 70vh;
+}
+.container{
+    position: relative;
+    top: 30%;
+    font-family: 'Nobile', sans-serif;
+}
+h2{
+    font-weight: bold
+}
+button{
+    box-shadow: 0px 0px 9px 1px rgba(0, 0, 0, .4);
+    height: 5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 10px;
+    font-family: 'Jura', sans-serif;
+}

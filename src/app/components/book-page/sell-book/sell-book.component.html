@@ -1,0 +1,68 @@
+<div class="container mt-5">
+
+  <small class="mr-5">Welcome {{userName | uppercase}}</small>
+
+  <h2 class="mb-4">Search Books</h2>
+
+  <div class="row mt-5">
+    <div class="col-12 card">
+
+      <div class="card-head text-center pt-3">
+        <input type="text" class="col-md-10 form-control mx-auto" [(ngModel)]="inputText">
+      </div>
+      <div class="card-body">
+        <button class="btn btn-outline-primary btn-block col-md-9 mx-auto" type="button" (click)="onSearching()" [disabled]="loader">Search Book</button>
+      </div>
+
+    </div>
+
+    <div class="row mx-auto position-relative mt-5 col-12">
+
+      <div class="nex" *ngIf="isBckLoaded" (click)="nexSlide()"></div>
+      <div class="prev"*ngIf="isBckLoaded"(click)="prevSlide()"></div>
+
+      <div class="book-amount-tracker" *ngIf="isBckLoaded">{{ indexbk }} / {{ total }}</div>
+      <!--  Spinner/loader -->
+      <div class="containe mx-auto" *ngIf = "loader">
+        <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>  
+        </div>
+        <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>  
+        </div>
+        <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>  
+        </div>
+      </div>
+
+      <div class="card my-card col-12 col-md-3 col-lg-2 p-2" *ngFor="let book of books">
+        <div class="card-img-top mx-auto m-0" [style.backgroundImage]="book.image"></div>
+        <div class="card-body pt-0 pb-0 p-md-0 ">
+          <p class="card-text pb-0 mb-0"><strong>Author: </strong>{{book.authors}}</p>
+          <h6 class="card-text pt-0 mt-0 mb-4">Isbn: {{book.isbn}}</h6>
+          <button class="btn btn-outline-success btn-sm mt-0" (click)="addBooks(book)">Add</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- <div class="test" [style.background]="background"></div> -->
+
+  </div>
+
+  <hr height="3rem">
+
+  <app-inventory></app-inventory>
+
+  <app-books-in-store></app-books-in-store>
+
+  <app-sold-books></app-sold-books>
+
+
+</div>

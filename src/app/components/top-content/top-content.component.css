@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css?family=Average|Gentium+Basic|Jura:700|Lustria|Nobile:400,700');
+
+.wrap{
+    height: 430vh;
+    position: relative;
+}
+
+@media only screen and (min-width: 365px){
+    .wrap{
+        height: 330vh;
+    }
+}
+@media only screen and (min-width: 800px){
+    .wrap{
+        height: 230vh;
+    }
+}
+
+/* blue diagonal background css*/
+.blue-diagonal{
+    background-color:#1496fd;
+    position: fixed;
+    top: -30vh;
+    left: -20vw;
+    width: 140%;
+    transform: rotate(-8deg);
+    height: 110vh;
+    box-shadow: 3px 0px 12px 1px rgba(0, 0, 0, .4);     
+    overflow: hidden;
+    background: linear-gradient(to bottom right, #008cff, #a2d7ff); 
+    z-index: -1;
+}
+.wrap-blue-diagonal{
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+}
+
+.title{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2vh;
+    width: 400px;
+}
+.title img{
+    width: 100%;
+}
+
+.hovImg-learn{
+    position: relative;
+    top: 15vh;
+    height: wrap;
+    display: block
+
+    
+}
+@media only screen and (min-width: 1000px){
+    .hovImg-learn{
+        position: absolute;
+        top: 35vh;
+    }
+}
+/*hovering image on the left css*/
+.img-wrapper{
+    position: relative;
+    top: 0;
+    padding: 20px;
+    height: 200px;
+    display: inline-block;
+}
+.img{
+    position: relative;
+    width: 90%;
+    height: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    animation: hover 4s infinite ease 0s; 
+    z-index: 2;
+}
+@keyframes hover{
+    0%{
+        top: 50%;
+    }
+    50%{
+        top: 25%;
+    }
+    100%{
+        top: 50%;
+    }
+}
+.img img{
+    position: absolute;
+    width: 100%;
+    bottom: -50%;
+    left: 50%;
+    transform: translateX(-50%)
+}
+.img-shadow{
+    position: absolute;
+    width: 60%;
+    height: 0px;
+    right: 0;
+    top: 100%;
+    animation: hovShad 4s infinite ease 0s;
+    z-index: 1;
+}
+
+@keyframes hovShad{
+    0%{
+        width: 80%;
+    }
+    50%{
+        width: 90%;
+    }
+    100%{
+        width: 80%;
+    }
+}
+.img-shadow img{
+    width: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+/* text above start learning and the start learning button*/
+.text-group{
+    position: relative;
+    display: inline-block;
+    top: 5vh; 
+    padding: 20px;
+    font-family: 'Nobile', sans-serif;
+}
+@media only screen and (min-width: 1000px){
+    .text-group{
+        left: 5vw;
+        padding: 0;
+    }
+}
+.text{
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, .4);
+    box-shadow: 0px 0px 9px 1px rgba(0, 0, 0, .6);
+    padding: 20px;
+}
+
+.text h4{
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+/*Start button*/
+.button{
+    position: relative;
+    top: 2rem;
+    left: 50%;
+    width: 15rem;
+    height: 5rem;
+    transform: translateX(-50%);
+    border-radius: 5px;    
+    font-weight: bold;
+    font-size: 1.4rem;
+    white-space: pre-line;
+    box-shadow: 3px 3px 12px 1px rgba(0, 0, 0, .4); 
+    font-family: 'Jura', sans-serif;
+}
+
+/**/
+.video-content-wrapper{
+    
+    display: block;
+    position: absolute;
+    box-shadow: 0px -5px 9px rgba(0, 0, 0, .4);
+    background-color: rgba(255, 255, 255, 0.9);
+    bottom: 0;
+    padding: 20px;
+    height: wrap;
+    margin-bottom: 100px;
+}
+@media only screen and (min-width: 1000px){
+    .video-content-wrapper{
+        position: absolute;
+        bottom: 0;
+    }
+}
+.video{
+    display: inline-block;
+    position: relative;
+    left: 0;
+    top: 0; 
+    padding: 10px
+}
+.video video{
+    width: 100%;
+    top: 0;
+}
+
+.wrap-btn-words{
+    display: none;
+    position: relative;
+    left: 100vw;
+    top: 0;
+    padding: 10px;
+    font-family: 'Nobile', sans-serif;
+
+}
+.about-video-words{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.btns-group button{    
+    font-size: 1.4rem;
+    box-shadow: 3px 3px 12px 1px rgba(0, 0, 0, .4);     
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    font-family: 'Jura', sans-serif;
+}

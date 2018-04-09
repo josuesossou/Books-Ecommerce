@@ -1,0 +1,15 @@
+.my-card .card-img-top{
+    width:8rem;
+    height: 13rem;
+    background-size:contain;
+    background-position:center;
+    background-repeat:no-repeat;
+    margin-bottom: 0;
+}
+.my-card{
+    border: 0 solid white;
+}
+.my-card .btn-group{
+    position: absolute;
+    bottom: -.5rem;
+}

@@ -1,0 +1,22 @@
+<div class="main" *ngIf='paid'>
+  <div class="bg-opac">
+
+    <h2 class="text-center">Welcome {{ userName }}!</h2>
+
+    <div class="container text-center">
+      <video controls class="col-12 col-lg-9 mx-auto text-center">
+          <source [src]="mp4" type="video/mp4">
+          <source [src]="webm" type="video/webm">
+          Your browser does not support the video tag.
+      </video>      
+    </div>
+
+    <div class="amazon-aff">
+      <app-amazon-affiliate></app-amazon-affiliate>
+    </div>
+    
+  </div>
+</div>
+
+
+

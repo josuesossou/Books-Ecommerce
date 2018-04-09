@@ -1,0 +1,19 @@
+
+.wra{
+    position: relative;
+    bottom: 0;
+    box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, .2);
+    margin-bottom: 0;
+    background-color: white;
+}
+.row{
+    padding: 35px
+}
+.card{
+    height: 200px;
+    border: 0px solid white;
+}
+.bookimg{
+    height: 150px;
+    cursor: pointer;
+}

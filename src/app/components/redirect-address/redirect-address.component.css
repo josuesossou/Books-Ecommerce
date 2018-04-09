@@ -1,0 +1,16 @@
+.wrap{
+    width: 100%;
+    height: wrap;
+    padding: 20px;
+}
+.card-block{
+    padding:30px;
+
+}
+input{
+    margin-top: 3px;
+}
+
+.card{
+    border: 0px solid white
+}

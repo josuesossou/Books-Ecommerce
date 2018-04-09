@@ -1,0 +1,59 @@
+.container{
+    background-color: white;
+    border-radius: .9rem .9rem 0 0;
+    padding: 3rem 2rem;
+}
+.books-collection{
+    background-color: rgba(250, 228, 186,.7);
+    min-height: 100vh;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+    margin: 0;
+}
+.card{
+    padding: 0 ;
+    padding-top: 2%;
+    margin: 1rem 0;
+    position: relative;
+    border: 0px solid white !important;
+}
+.card .card-body{
+    padding: 0;
+}
+.card-img-top{
+    width:8rem;
+    height: 13rem;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+.card-title{
+    margin:.3rem 0;
+}
+.card-text{
+    margin:.3rem 0;
+}
+.card:hover{
+    transition: .3s;
+    padding-top: 2%;
+}
+.card-sold:hover{
+    border: 2px solid rgb(233, 47, 47)!important;
+}
+.card-not-sold:hover{
+    border: 2px solid rgb(63, 201, 63)!important;
+}
+.sold-card{
+    position: absolute;
+    top: 2%;
+    width:8rem;
+    height: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(233, 47, 47);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    line-height: 160%;
+}

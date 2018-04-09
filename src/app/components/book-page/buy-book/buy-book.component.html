@@ -1,0 +1,16 @@
+<div class="container">
+ 
+    <div class="card-row row border-dark p-3 m-5">
+        <img class="card-img mr-auto mt-0 mb-3 pt-0 col-9 col-md-4 d-inline-block" [src]="book.image" alt="No Image">
+        <div class="card-body ml-3 pt-0 col-12 col-md-7 ml-auto d-inline-block">
+            <p class="card-title m-0 p-0"><strong>Title: </strong> {{book.title_long}}</p>
+            <p class="card-text p-0 m-0 mt-2"><strong>Isbn: </strong>{{book.isbn}}</p>
+            <p class="card-text p-0 m-0 mt-2"><strong>Authors: </strong>{{book.authors[0]}}</p>
+            <p class="card-text p-0 m-0 mt-2"><strong>Published Date: </strong>{{book.date_published}}</p>
+            <p class="card-text p-0 m-0 mt-2"><strong>Seller: </strong>{{book.seller}}</p>
+            <h5 class="card-text p-0 m-0 mt-2"><strong>Price: </strong>{{book.price | currency: 0}}</h5>
+            <button class="btn btn-lg mt-2" [class.btn-success]="!book.sold" [class.btn-disabled]="book.sold" (click)="buybook()" [disabled] = "book.sold">Buy now!</button>
+        </div>
+    </div>
+      
+</div>
