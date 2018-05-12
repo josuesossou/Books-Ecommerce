@@ -1,27 +1,27 @@
 <div class="container">
     <!--  Spinner/loader -->
-<div class="containe mx-auto" *ngIf="loader">
+    <div class="containe mx-auto" *ngIf="loader">
         <div class="dot-container">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>  
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>  
         </div>
         <div class="dot-container">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>  
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>  
         </div>
         <div class="dot-container">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>  
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>  
         </div>
-      </div>
+    </div>
       
-    <div class="card-row d-flex border-dark p-3 m-5" *ngIf="!loader">
-        <div class="card-img mr-auto mt-0 mb-3 pt-0 col-9 col-md-4" appImgHeight [style.backgroundImage]="book.image"></div>
+    <div class="card-row row border-dark p-3 m-5" *ngIf="!loader">
+        <div class="card-img mx-auto mr-md-auto mt-0 mb-3 pt-0 col-9 col-md-4 d-block" appImgHeight [style.backgroundImage]="book.image"></div>
         <!-- <img class="card-img mr-auto mt-0 mb-3 pt-0 col-9 col-md-4" src="" [src]="book.image" alt="Book Image"> -->
-        <div class="card-body ml-3 pt-0 col-12 col-md-7 ml-auto">
+        <div class="card-body ml-3 pt-0 col-12 col-md-7 ml-md-auto d-inline-block">
             <p class="card-title m-0 p-0"><strong>Title: </strong> {{book.title_long}}</p>
             <p class="card-text p-0 m-0 mt-2"><strong>Isbn: </strong>{{book.isbn}}</p>
             <p class="card-text p-0 m-0 mt-2"><strong>Authors: </strong>{{book.authors[0]}}</p>

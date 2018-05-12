@@ -2,10 +2,6 @@
      border: 3px solid;
      border-radius: 1em
  }
-img {
-    width: 10em
-}
-
 .card-img{
     background-size:100% 100%;
     background-position:center;
