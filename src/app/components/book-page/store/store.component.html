@@ -5,7 +5,9 @@
     <div class="row">
 
       <div *ngFor="let book of books" class="card border-light text-left col-12 col-sm-12 col-md-4 col-lg-3" [class.card-sold]="book.sold" [class.card-not-sold]="!book.sold">
-        <a routerLink="/buy-book/{{book.uid}}/{{book.isbn}}"><div class="card-img-top mx-auto" [style.backgroundImage]="book.image"></div></a>
+        <a routerLink="/buy-book/{{book.uid}}/{{book.isbn}}">
+          <div class="card-img-top mx-auto" [style.backgroundImage]="book.image"></div>
+        </a>
         <div class="card-body m-3">
           <p class="card-title"><strong>Title: </strong> {{book.title_long}}</p>
           <p class="card-text"><strong>Authors: </strong>{{book.authors[0]}}</p>

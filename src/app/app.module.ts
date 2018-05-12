@@ -48,14 +48,13 @@ import { BuyerAuthGuard } from './guards/buyerAuth.guard';
 import { IsbnBooksService } from './services/isbn-books.service';
 import { BooksDataService } from './services/books-data.service';
 import { BuyBookProccessComponent } from './components/book-page/buy-book-proccess/buy-book-proccess.component';
-
-
+import { ImgHeightDirective } from './directives/img-height.directive';
 
 const appRoutes:Routes = [
-  {path:'perfect-turkey', component:HomeComponent},
-  {path:'video', component:VideoComponent, canActivate:[AuthGuard]},
-  {path:'confirm', component:RedirectConfirmComponent, canActivate:[AuthGuard]},
-  {path:'address', component:RedirectAddressComponent, canActivate:[AuthGuard]},
+  // {path:'perfect-turkey', component:HomeComponent},
+  // {path:'video', component:VideoComponent, canActivate:[AuthGuard]},
+  // {path:'confirm', component:RedirectConfirmComponent, canActivate:[AuthGuard]},
+  // {path:'address', component:RedirectAddressComponent, canActivate:[AuthGuard]},
   {path:'sell-book', component:SellBookComponent, canActivate:[SellerAuthGuard]},
   {path:'book-purchased', component:BookPurchasesComponent, canActivate:[BuyerAuthGuard]},
   {path:'buy-book/:uid/:isbn', component:BuyBookComponent, canActivate:[AuthGuard]},
@@ -94,7 +93,8 @@ const appRoutes:Routes = [
     SoldBooksComponent,
     BuyBookProccessComponent,
     NotfoundComponent,
-    BookPurchasesComponent
+    BookPurchasesComponent,
+    ImgHeightDirective
   ],
   imports: [
     BrowserModule,
@@ -118,4 +118,5 @@ const appRoutes:Routes = [
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

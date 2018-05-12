@@ -23,10 +23,12 @@ export class BuyBookComponent implements OnInit {
   description:string;
   userEmail:string;
   name:string;
+  loader:boolean;
   userInfo:User;
   userId;
   isbn;
   uid;
+
   constructor(
     public route:ActivatedRoute,
     public location:Location,
@@ -36,6 +38,7 @@ export class BuyBookComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loader = true;
     this.isbn = this.route.snapshot.paramMap.get('isbn');
     this.uid = this.route.snapshot.paramMap.get('uid');
     let formatPrice:number;
@@ -47,7 +50,6 @@ export class BuyBookComponent implements OnInit {
       this.book = JSON.parse(book.payload.val());
       //slicing the image url from url()---> saved in firebase as url(http...)
       lastNumb = this.book.image.length - 1;
-      this.book.image = this.book.image.slice(4,lastNumb);
       //formating the price so that if the user enter a price that will not be acceptable through stripe because of '.', this code will remove any '.' and numbers after the dot
       formatPrice = this.book.price * 100;
       newFormatPrice = formatPrice.toString().split('.');
@@ -57,6 +59,7 @@ export class BuyBookComponent implements OnInit {
       postedDate = new Date(this.book.time).toLocaleDateString();
       //seting up a description that will be used to track the type of book the user paid for
       this.description = `${now} - Bought ${this.book.title} | ${this.book.isbn} book from ${this.book.seller}. Posted on ${postedDate}`;
+      this.loader = false;
     });
   }
 

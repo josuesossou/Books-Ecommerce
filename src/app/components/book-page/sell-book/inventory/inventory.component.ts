@@ -17,6 +17,7 @@ export class InventoryComponent implements OnInit {
 
   invtoryBooks:Book[];
   book:Book;
+  seller:string;
 
   constructor(
     public bkData:BooksDataService,
@@ -28,6 +29,7 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit() {
     this.payoutService.auth().subscribe(auth=>{
+      this.seller = auth.displayName;
       this.bkData.getInventoryBooks(auth.uid).subscribe(data=>{
         this.invtoryBooks = [];
         for(let d of data){
@@ -55,6 +57,7 @@ export class InventoryComponent implements OnInit {
       this.flashMessage.show('Enter an amount higher than $1', {cssClass:'alert-danger', timeout:1000});
     }else{
       this.bkData.sellBook(book.isbn, book).then(()=>{
+        this.book.seller = this.seller;
         this.book.isForSale = false;
         this.removeBck(book.isbn);
       });

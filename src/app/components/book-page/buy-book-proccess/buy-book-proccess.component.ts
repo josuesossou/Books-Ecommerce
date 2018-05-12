@@ -64,7 +64,7 @@ export class BuyBookProccessComponent implements OnInit {
           let charge:Payment;
           if(!charges || charges.length <= 0){
 
-            this.router.navigate(['/store']);
+            this.router.navigate(['/']);
             this.flashMessage.show(`Failed to purchase ${book.title}`, {cssClass:'alert-danger', timeout:5000});
 
           }else if(charges.length > 0){   

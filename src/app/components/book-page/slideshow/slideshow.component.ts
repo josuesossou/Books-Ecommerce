@@ -14,6 +14,7 @@ export class SlideshowComponent implements OnInit {
   books:Book[];
   book:Book;
   uids:String[];
+  loader:boolean;
 
   constructor(
     public bkData:BooksDataService,
@@ -22,7 +23,7 @@ export class SlideshowComponent implements OnInit {
 
 
   ngOnInit() {
-
+    this.loader = true;
     this.payoutService.auth().subscribe(auth=>{
       if(auth){
 
@@ -67,7 +68,7 @@ export class SlideshowComponent implements OnInit {
 
             this.books.unshift(this.book);
           }
-        
+        this.loader = false
       });
     }
   }
