@@ -43,11 +43,11 @@ export class BooksInStoreComponent implements OnInit {
 
   changePrice(book){
     if(book.price == undefined || book.price <= 1){
-      this.flashMessage.show('Enter an amount', {cssClass:'alert-danger', timeout:1000});
+      this.flashMessage.show('Enter an amount greater than $1', {cssClass:'alert-danger', timeout:4000});
     }else{
       if (!book.sold){
+        book.changePrice = false;
         this.bkData.sellBook(book.isbn, book);
-        this.book.changePrice = false;
       }
     }
   }

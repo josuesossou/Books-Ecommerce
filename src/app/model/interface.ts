@@ -26,3 +26,11 @@ export interface Videos {
     mp4?:string;
     webm?:string;
 }
+
+export interface UserData {
+    fullName?:string;
+    email?:string;
+    business?:string;
+    gmailAccount?:string;
+    uid?:string;
+}

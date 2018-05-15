@@ -22,42 +22,36 @@ export class StoreComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.payoutService.auth().subscribe(auth=>{
       if(auth){
-
-        this.bkData.getUserIds().subscribe(data=>{
-          this.uids = [];
-          for(let d of data){
-            this.uids.push(d.key);
-          }
-          this.getBooks();
-        });
-
+        this.getAllBooks();
       }else{
-
-        this.payoutService.loginAnonymously().then(()=>{
-          this.bkData.getUserIds().subscribe(data=>{
-            this.uids = [];
-            for(let d of data){
-              this.uids.push(d.key);
-            }
-            this.getBooks();
+        this.payoutService.deleteAnonymousUser().then(res => {
+          this.payoutService.loginAnonymously().then(()=>{
+            this.getAllBooks();
           });
-        });
-        
+          console.log(res);
+        })      
       }
     })
     
   }
 
+  getAllBooks() {
+    this.bkData.getUserIds().subscribe(data=>{
+      this.uids = [];
+      for(let d of data){
+        this.uids.push(d.key);
+      }
+      this.getBooks();
+    });
+  }
 
   getBooks(){
     this.books = [];
-    for(const id of this.uids){
-    
-      this.bkData.getUserForSaleBooks(id).subscribe(data=>{
 
+    for(const id of this.uids){
+      this.bkData.getUserForSaleBooks(id).subscribe(data=>{
         for(let d of data){
           this.book = JSON.parse(d.payload.val());
           this.book.changePrice = false;
@@ -68,12 +62,11 @@ export class StoreComponent implements OnInit {
             this.book.authors[0]=this.book.authors[0].slice(0,14)+"..."
           }
           this.books.unshift(this.book);
-
         }
+
         this.books.sort(function(a,b){
           return b.time - a.time
-        })
-        
+        });
       });
     }
   }

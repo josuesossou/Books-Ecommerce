@@ -3,9 +3,10 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth, AngularFireAuthProvider } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
-import { Client } from '../model/interface';
+import { Client, UserData } from '../model/interface';
 import { Profile } from 'selenium-webdriver/firefox';
-
+import { Router } from '@angular/router'
+import { User } from '@firebase/auth-types';
 
 @Injectable()
 export class PayoutService {
@@ -15,6 +16,7 @@ export class PayoutService {
   constructor(
     private afdb:AngularFireDatabase,
     private afAuth:AngularFireAuth,
+    private router:Router,
   ) { 
     this.afAuth.authState.subscribe((auth) =>{
       if(auth) this.userId = auth.uid
@@ -48,61 +50,123 @@ export class PayoutService {
     })
   }
 
-  loginWithEmailAndPassword(email,password){
+  loginWithEmailAndPassword(email:string, password:string, buyer:boolean){
     let userIds:any[];
 
-    return this.afAuth.auth.signInWithEmailAndPassword(email,password)
-      .then(user=>{
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        const user = this.afAuth.auth.currentUser;
+        if (buyer && !user.emailVerified) {
+          user.delete()
+          return;
+        }
+
+        if (!buyer && !user.emailVerified) {
+          this.afdb.list('/registered').remove(user.uid)
+          user.delete()
+          return;
+        };
+
+        if (buyer) return new Observable();
+
         return this.afdb.list('/registered').valueChanges();
 
       }).catch(err=>{
         return Promise.reject(err);
       });
-
   }
 
   loginAnonymously(){
     return this.afAuth.auth.signInAnonymously();
   }
 
-  deleteAnonymousSignUp(authid){
-    return this.afAuth.auth.onAuthStateChanged
+  deleteAnonymousUser(){
+    const user = this.afAuth.auth.currentUser;
+
+    if (!user) {
+      return;
+    }
+
+    if (user.isAnonymous) user.delete().then(() => {
+        return Promise.resolve()
+      }).catch(e => {
+        return Promise.reject(e)
+      });
+
+    return Promise.resolve(user);
   }
+/************************************ ***********************************/
 
   //checking authstate
   auth(){
     return this.afAuth.authState.map((auth) => auth);
   }
+/************************************ ***********************************/
 
   checkCharge(uid){
     return this.afdb.list('/payments/'+ uid ).valueChanges()
   }
+/************************************ ***********************************/
 
   //submiting an address on the redirect-address page
   clientAddress(id:String, value:Client){
     return this.afdb.list(`/address/${id}`).push(value)
   }
+/************************************ ***********************************/
 
   loadVid(){
     return this.afdb.list('/vidUrls/').valueChanges()
   }
 
+/************************************ ***********************************/
   logout(){
     return this.afAuth.auth.signOut();
   }
 
-  //registering users to selling books
-  register(email:string, password:string, fullName:string){
-    return this.afAuth.auth.createUserAndRetrieveDataWithEmailAndPassword(email, password).then(()=>{
+  updateRegister(uid:string, userData:UserData) {
+    this.afdb.list('/registered').set(uid, userData)
+  }
 
+  resendVerificationEmail(email:string, password:string) {
+    return this.afAuth.auth.signInAndRetrieveDataWithEmailAndPassword(email, password).then(auth => {
+      console.log(auth);
       let user = this.afAuth.auth.currentUser;
-      return user.updateProfile({displayName:fullName, photoURL:'' }).then(()=>{
-        this.afdb.list(`/registered`).push(user.uid)
+      return user.sendEmailVerification().then(() => {
+        this.logout();
+        return Promise.resolve('Email successfully sent');
+      }).catch((e) => {
+        return Promise.reject(e);
       })
-
+    }).catch(e => {
+      return Promise.reject(e);
+    })
+  }
+/************************************ ***********************************/
+  //registering users to selling books
+  register(email:string, password:string, name:string, userData?:UserData){
+    const db = this;
+    return this.afAuth.auth.createUserAndRetrieveDataWithEmailAndPassword(email, password).then((auth)=>{
+      let user = this.afAuth.auth.currentUser;
+      
+      return user.sendEmailVerification().then(() => {
+        userData.uid = user.uid;
+        return user.updateProfile({displayName: name, photoURL:'' }).then(()=>{
+          if (!userData) return;
+          this.updateRegister(user.uid, userData)
+        }).catch(err => {
+          console.log(err)
+        });
+      }).catch((error) => {
+        if (!userData) return;
+        this.afdb.list('/registered').remove(user.uid)
+        user.delete();
+      });
     })
   }
 
-
+/************************************ ***********************************/
+  resetPassword(email) {
+    return this.afAuth.auth.confirmPasswordReset('jkjh', 'kj')
+  }
 }
 

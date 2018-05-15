@@ -6,6 +6,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
+import { UserData } from '../../../model/interface';
 
 @Component({
   selector: 'app-login',
@@ -22,31 +23,54 @@ export class LoginComponent implements OnInit {
     public flashMessage:FlashMessagesService) { }
   email:string;
   password:string;
+  isVerified:boolean = true;
+  resendingVirification:boolean = false;
 
   ngOnInit() {
   }
 
   onSubmit(){
-    this.payoutService.loginWithEmailAndPassword(this.email, this.password)        
+    if (this.resendingVirification){
+      this.payoutService.resendVerificationEmail(this.email, this.password).then(res => {
+        console.log('success', res)
+        this.flashMessage.show(res, {cssClass:'alert-success', timeout:5000});
+        this.router.navigate(['/login']);
+      }).catch(err => {
+        this.flashMessage.show(err.message, {cssClass:'alert-danger', timeout:5000});
+        this.router.navigate(['/login']);
+      });
+      return;
+    }
+
+    this.payoutService.loginWithEmailAndPassword(this.email, this.password, false)        
     .then(res=>{
-      res.subscribe(userIds=>{
+      console.log(res)
+      if (!res) return  this.isVerified = false;
+
+      res.subscribe((userIds:UserData[])=>{
         this.payoutService.auth().subscribe(auth=>{
-          if(!userIds.includes(auth.uid)){
-            // this.payoutService.logout()
-            // location.reload();
-            this.flashMessage.show('You are not registered', {cssClass:'alert-danger', timeout:5000});
-            return this.router.navigate([`/login`]);
+          const uids = userIds.filter((userId) => userId.uid === auth.uid);
+
+          if(uids.length === 0){
+            this.flashMessage.show('Your account is not registered as seller account', {cssClass:'alert-danger', timeout:5000});
+
+            if (confirm('Would you like to register to seller Account?')) {
+              this.router.navigate(['/register']);
+            } else {
+              this.flashMessage.show('You did not registered to seller account', {cssClass:'alert-danger', timeout:5000});
+              return this.router.navigate(['/']);
+            }
           }
-          this.flashMessage.show('You have looged in', {cssClass:'alert-success ', timout:5000});
-          this.router.navigate([`/sell-book`]);
+
+          this.flashMessage.show('You are now login in', {cssClass:'alert-success ', timout:5000});
+          this.router.navigate(['/sell-book']);
         })
       })
    
-    })
-    .catch(err =>{
+    }).catch(err =>{
       this.flashMessage.show(err.message, {cssClass:'alert-danger', timeout:5000});
       this.router.navigate(['/login']);
-    })
+    });
   }
 
 }

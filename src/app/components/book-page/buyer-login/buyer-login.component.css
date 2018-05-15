@@ -2,12 +2,6 @@
     transition: display .6s ease-in-out;
     display: none
 }
-/* .car{
-    position: relative;
-    left: 50%;
-    top:50%;
-    transform: translate(-50%, -50%)
-} */
 small, h5{
     color: rgb(255, 82, 82)
 }
@@ -15,7 +9,7 @@ button{
     cursor: pointer;
 }
 /* h5 {
-    position: relative;
+    position: absolute;
     text-align: center;
     left: 50%;
     transform: translateX(-50%);

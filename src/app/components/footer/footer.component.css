@@ -1,6 +1,7 @@
 nav{
-    height: 50px;
     margin: 0; 
+    flex-flow: wrap;
+    box-shadow: 0 -1px 6px 0px rgba(0, 0, 0, 0.267)
 }
 nav i, a{
     margin: 0 10px
@@ -11,4 +12,8 @@ nav i, a{
 }
 a.btn:hover{
     text-decoration: underline!important;
+}
+
+small{
+    display: block
 }

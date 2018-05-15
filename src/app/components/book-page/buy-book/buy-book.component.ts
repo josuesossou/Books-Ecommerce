@@ -41,11 +41,13 @@ export class BuyBookComponent implements OnInit {
     this.loader = true;
     this.isbn = this.route.snapshot.paramMap.get('isbn');
     this.uid = this.route.snapshot.paramMap.get('uid');
+
     let formatPrice:number;
     let newFormatPrice;
     let lastNumb;
     let now;
     let postedDate;
+
     this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book=>{
       this.book = JSON.parse(book.payload.val());
       //slicing the image url from url()---> saved in firebase as url(http...)
@@ -67,60 +69,63 @@ export class BuyBookComponent implements OnInit {
 //fuction that checks if user login or not then runs funtions that confugure and open the stripecheckout view.
   buybook(){
     if(!this.book.sold){
-
-      this.payoutService.auth().subscribe(auth=>{
-        if(!auth || auth.displayName == null){
-          this.payoutService.loginUsingGoogle().then((res)=>{
-            this.userInfo = res;
+      this.payoutService.deleteAnonymousUser().then(res => {
+        this.router.navigate(['/buyer-login']);
+        console.log(res);
+      })
+      // this.payoutService.auth().subscribe(auth=>{
+      //   if(!auth || auth.displayName == null){
+      //     this.payoutService.loginUsingGoogle().then((res)=>{
+      //       this.userInfo = res;
             
-            this.userId = this.userInfo.user.uid;
-            this.name = this.userInfo.user.displayName;
-            this.userEmail = this.userInfo.user.email;
+      //       this.userId = this.userInfo.user.uid;
+      //       this.name = this.userInfo.user.displayName;
+      //       this.userEmail = this.userInfo.user.email;
 
-            return this.name;
-          }).then(()=>{
-            this.configureStripeCheckout();
-          });
+      //       return this.name;
+      //     }).then(()=>{
+      //       this.configureStripeCheckout();
+      //     });
           
-          return;
-        }
-        this.name = auth.displayName;
-        this.userId = auth.uid;
-        this.userEmail = auth.email;
-        this.configureStripeCheckout();
-      });
+      //     return;
+      //   }
+      //   this.name = auth.displayName;
+      //   this.userId = auth.uid;
+      //   this.userEmail = auth.email;
+      //   this.configureStripeCheckout();
+      // });
 
     }
   }
 
-  configureStripeCheckout(){
+  // configureStripeCheckout(){
 
-    this.handler = StripeCheckout.configure({
-      key: environment.stripekey,
-      image: "https://stripe.com/img/documentation/checkout/marketplace.png",
-      locale: "auto",
-      email:this.userEmail,
-      token: token => {
-        this.payoutService.processBookPayment(token, this.price, this.description, this.userEmail)
-      }
-    });
-    this.handlePayment(this.name, this.book.title);
-  }
+  //   this.handler = StripeCheckout.configure({
+  //     key: environment.stripekey,
+  //     image: "https://stripe.com/img/documentation/checkout/marketplace.png",
+  //     locale: "auto",
+  //     email:this.userEmail,
+  //     token: token => {
+  //       this.payoutService.processBookPayment(token, this.price, this.description, this.userEmail)
+  //     }
+  //   });
+  //   this.handlePayment(this.name, this.book.title);
+  // }
 
-  handlePayment(name, describe) {
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book=>{
-      let nbook:Book = JSON.parse(book.payload.val());
-      if(!nbook.sold){
-        this.handler.open({
-          name: 'Login as '+name,
-          description: "Buying "+ describe,
-          amount: this.price
-        });
+  // handlePayment(name, describe) {
+  //   this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book=>{
+  //     let nbook:Book = JSON.parse(book.payload.val());
+  //     if(!nbook.sold){
+  //       this.handler.open({
+  //         name: 'Login as '+name,
+  //         description: "Buying "+ describe,
+  //         amount: this.price
+  //       });
         
-        this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
-      } 
-    })
-  }
+  //       this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
+  //     } 
+  //   })
+  // }
 
 
 }

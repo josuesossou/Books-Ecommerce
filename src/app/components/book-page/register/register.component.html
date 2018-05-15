@@ -1,25 +1,26 @@
 <div class="row">
-  <div class="car col-11 col-md-5 col-lg-4 col-xl-3">
-    <div class="card">
-      <div class="card-block">
-        <h2 class="text-center mb-4 mt-2">Register</h2>
+  <div class="container pt-5 pb-5">
 
-        <div class="container">
-          <form (submit)="onSubmit()" class="mb-4">
-
+    <div class="card mt-3 col-11 col-md-5 col-lg-4 ">
+      <div class="card-block p-2">
+        <h2 class="text-center mb-3 mt-2">Register</h2>
+          <form (submit)="onSubmit()" class="mb-6">
+            <!-- full name -->
             <div class="form-group">
-              <input type="text" placeholder="Enter your full name"
+              <label>Full Name</label>
+              <input type="text" placeholder="Full name"
               [(ngModel)]="fullName" 
               #fullNameId = "ngModel"
-              [ngClass]="{'is-invalid': fullNameId.errors?.required && fullNameId.touched || fullNameId.errors?.pattern}"
+              [ngClass]="{'is-invalid': fullNameId.errors?.required && fullNameId.touched}"
               name="fullName" 
               class="form-control"
               required>
               <div *ngIf = "fullNameId.errors?.required && fullNameId.touched" class="invalid-feedback"> Full Name is required</div>
             </div>
-
+            <!-- email use for login -->
             <div class="form-group">
-              <input type="email" placeholder="Email"
+              <label>Email Address</label>
+              <input type="email" placeholder="Email Address"
               [(ngModel)]="email" 
               #emailId = "ngModel"
               [ngClass]="{'is-invalid': emailId.errors?.required && emailId.touched || emailId.errors?.pattern}"
@@ -30,8 +31,9 @@
               <div *ngIf = "emailId.errors?.required && emailId.touched" class="invalid-feedback"> email is required</div>
               <div *ngIf = "emailId.errors?.pattern && emailId.touched" class="invalid-feedback"> email is invalid</div>
             </div>
-
+            <!-- password -->
             <div class="form-group">
+              <label>Password</label>
               <input type="password" 
               placeholder="Password" 
               required 
@@ -44,10 +46,11 @@
               <div *ngIf="passwordId.errors?.required && passwordId.touched" class="invalid-feedback"> Password is required</div>
               <div *ngIf="passwordId.errors?.minlength && passwordId.touched" class="invalid-feedback"> Password must be at least 6 characters</div>
             </div>
-
+            <!-- Retype password -->
             <div class="form-group">
+              <label>Re-password</label>
               <input type="password" 
-              placeholder="Retype password" 
+              placeholder="Re-type password" 
               #rePasswordId="ngModel"
               [ngClass]="{'is-invalid': rePasswordId.errors?.required && rePasswordId.touched || rePasswordId.errors?.minlength}"
               required 
@@ -57,12 +60,25 @@
               class="form-control">
               <div *ngIf="rePasswordId.errors?.required && rePasswordId.touched" class="invalid-feedback"> Password is required</div>
               <div *ngIf="rePasswordId.errors?.minlength && rePasswordId.touched" class="invalid-feedback"> Password must be at least 6 characters</div>
-              <small *ngIf="passwordDonMatch">Passwords don't match. Try again.</small>
+              <small *ngIf="passwordDonMatch" class="small">Passwords don't match. Try again.</small>
             </div>
+
+            <!-- business name -->
+            <div class="form-group">
+              <label>Business Name <small>(will be displayed with your items)</small></label>
+              <input type="text"
+              [(ngModel)]="business" 
+              #businessName = "ngModel"
+              [ngClass]="{'is-invalid': businessName.errors?.required && businessName.touched}"
+              name="businessName" 
+              class="form-control"
+              required>
+              <div *ngIf = "businessName.errors?.required && businessName.touched" class="invalid-feedback">  Business name  is required</div>
+            </div>
+
+            <button routerLink="/login" class="btn btn-link btn-sm">Already have a seller account? Login</button>
             <input type="submit" class="btn btn-primary btn-block mt-3" value="Register">
           </form>
-        </div>
-
       </div>
     </div>
   </div>

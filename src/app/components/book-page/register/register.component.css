@@ -2,12 +2,15 @@
     transition: display .6s ease-in-out;
     display: none
 }
-.car{
-    position: absolute;
+.card{
+    position: relative;
     left: 50%;
     top:50%;
     transform: translate(-50%, -50%)
 }
 small{
-    color: rgb(255, 82, 82)
+    color: rgba(77, 77, 77, 0.589)
+}
+.small{
+    color: rgba(252, 6, 6, 0.589)
 }

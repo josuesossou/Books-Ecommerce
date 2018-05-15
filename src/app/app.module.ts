@@ -35,10 +35,11 @@ import { RegisterComponent } from './components/book-page/register/register.comp
 import { SlideshowComponent } from './components/book-page/slideshow/slideshow.component';
 import { NavbarComponent } from './components/book-page/navbar/navbar.component';
 import { InventoryComponent } from './components/book-page/sell-book/inventory/inventory.component';
-import { BooksInStoreComponent } from './components/book-page/sell-book/books-in-store/books-in-store.component';
+import { BooksInStoreComponent } from './components/book-page/sell-book/books-for-sale/books-in-store.component';
 import { SoldBooksComponent } from './components/book-page/sell-book/sold-books/sold-books.component';
 import { BookPurchasesComponent } from './components/book-page/book-purchases/book-purchases.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { PasswordResetComponent } from './components/book-page/password-reset/password-reset.component';
 
 //services
 import { PayoutService } from './services/payout.service';
@@ -49,17 +50,20 @@ import { IsbnBooksService } from './services/isbn-books.service';
 import { BooksDataService } from './services/books-data.service';
 import { BuyBookProccessComponent } from './components/book-page/buy-book-proccess/buy-book-proccess.component';
 import { ImgHeightDirective } from './directives/img-height.directive';
+import { BuyerLoginComponent } from './components/book-page/buyer-login/buyer-login.component';
 
 const appRoutes:Routes = [
   // {path:'perfect-turkey', component:HomeComponent},
   // {path:'video', component:VideoComponent, canActivate:[AuthGuard]},
   // {path:'confirm', component:RedirectConfirmComponent, canActivate:[AuthGuard]},
-  // {path:'address', component:RedirectAddressComponent, canActivate:[AuthGuard]},
+  {path:'address', component:RedirectAddressComponent, canActivate:[AuthGuard]},
   {path:'sell-book', component:SellBookComponent, canActivate:[SellerAuthGuard]},
   {path:'book-purchased', component:BookPurchasesComponent, canActivate:[BuyerAuthGuard]},
-  {path:'buy-book/:uid/:isbn', component:BuyBookComponent, canActivate:[AuthGuard]},
+  {path:'buy-book/:uid/:isbn', component:BuyBookComponent},
   {path:'buy-book-process/:uid/:isbn/:bUser', component:BuyBookProccessComponent, canActivate:[AuthGuard]},
   {path:'', component:StoreComponent},
+  {path:'reset-password', component:PasswordResetComponent},
+  {path:'buyer-login', component:BuyerLoginComponent},
   {path:'login', component:LoginComponent},
   {path:'register', component:RegisterComponent},
   {path:'**', component:NotfoundComponent}
@@ -94,7 +98,9 @@ const appRoutes:Routes = [
     BuyBookProccessComponent,
     NotfoundComponent,
     BookPurchasesComponent,
-    ImgHeightDirective
+    ImgHeightDirective,
+    PasswordResetComponent,
+    BuyerLoginComponent
   ],
   imports: [
     BrowserModule,
