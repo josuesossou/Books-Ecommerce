@@ -14,6 +14,8 @@ export class NavbarComponent implements OnInit {
   storeLink:boolean;
   isbn;
   uid;
+  loginDetails:string;
+  isAuth:boolean;
 
   constructor(
     public route:ActivatedRoute,
@@ -23,23 +25,24 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    this.router.events.subscribe(event => {
-
-      if(location.pathname === '/perfect-turkey' || location.pathname === '/video' || location.pathname === '/address' || location.pathname === '/confirm' || location.pathname.startsWith('/buy-book-process/')){
-        this.storeLink = false;
-      }else{
-        this.storeLink = true;
+    this.payoutService.auth().subscribe(auth =>{
+      if(!auth || auth.isAnonymous) {
+        this.loginDetails = '';
+        this.isAuth = false;
+      } else{
+        this.loginDetails = auth.email 
+        this.isAuth = true  
       }
-
     });
-   
   }
 
-  login(){
-    this.payoutService.loginUsingGoogle().then(()=>{
-      this.router.navigate(['/book-purchased'])
-    });
+  buyerLogin() {
+
+  }
+
+  logout() {
+    this.payoutService.logout();
+    this.router.navigate(['/']);
   }
 
 }

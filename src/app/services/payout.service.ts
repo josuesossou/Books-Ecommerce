@@ -12,6 +12,7 @@ import { User } from '@firebase/auth-types';
 export class PayoutService {
 
   userId:string;
+  user;
 
   constructor(
     private afdb:AngularFireDatabase,
@@ -19,7 +20,10 @@ export class PayoutService {
     private router:Router,
   ) { 
     this.afAuth.authState.subscribe((auth) =>{
-      if(auth) this.userId = auth.uid
+      if(auth && !auth.isAnonymous) {
+        this.user = this.afAuth.auth.currentUser;
+        this.userId = auth.uid;
+      }
     });
   }
 
@@ -42,13 +46,13 @@ export class PayoutService {
   }
 
   ///login
-  loginUsingGoogle(){
-    return new Promise((resolve, reject)=>{
-      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())      
-        .then(result => resolve(result),
-          err => reject(err))
-    })
-  }
+  // loginUsingGoogle(){
+  //   return new Promise((resolve, reject)=>{
+  //     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())      
+  //       .then(result => resolve(result),
+  //         err => reject(err))
+  //   })
+  // }
 
   loginWithEmailAndPassword(email:string, password:string, buyer:boolean){
     let userIds:any[];
@@ -71,7 +75,7 @@ export class PayoutService {
 
         return this.afdb.list('/registered').valueChanges();
 
-      }).catch(err=>{
+      }).catch(err => {
         return Promise.reject(err);
       });
   }
@@ -83,17 +87,11 @@ export class PayoutService {
   deleteAnonymousUser(){
     const user = this.afAuth.auth.currentUser;
 
-    if (!user) {
-      return;
-    }
+    if (!user) return;
 
-    if (user.isAnonymous) user.delete().then(() => {
-        return Promise.resolve()
-      }).catch(e => {
-        return Promise.reject(e)
-      });
+    if (user.isAnonymous) return user.delete();
 
-    return Promise.resolve(user);
+    return;
   }
 /************************************ ***********************************/
 
@@ -129,7 +127,6 @@ export class PayoutService {
 
   resendVerificationEmail(email:string, password:string) {
     return this.afAuth.auth.signInAndRetrieveDataWithEmailAndPassword(email, password).then(auth => {
-      console.log(auth);
       let user = this.afAuth.auth.currentUser;
       return user.sendEmailVerification().then(() => {
         this.logout();
@@ -149,13 +146,7 @@ export class PayoutService {
       let user = this.afAuth.auth.currentUser;
       
       return user.sendEmailVerification().then(() => {
-        userData.uid = user.uid;
-        return user.updateProfile({displayName: name, photoURL:'' }).then(()=>{
-          if (!userData) return;
-          this.updateRegister(user.uid, userData)
-        }).catch(err => {
-          console.log(err)
-        });
+        this.updateProfile(name, userData);
       }).catch((error) => {
         if (!userData) return;
         this.afdb.list('/registered').remove(user.uid)
@@ -164,9 +155,22 @@ export class PayoutService {
     })
   }
 
+  updateProfile(name:string, userData?:UserData) {
+    let user = this.afAuth.auth.currentUser;
+    userData.uid = user.uid;
+    return this.user.updateProfile({displayName: name, photoURL:'' }).then(() => {
+      if (!userData) return;
+      this.updateRegister(this.user.uid, userData)
+    }).catch(err => {
+    });
+  }
 /************************************ ***********************************/
-  resetPassword(email) {
-    return this.afAuth.auth.confirmPasswordReset('jkjh', 'kj')
+  resetPassword(email:string) {
+    return this.afAuth.auth.sendPasswordResetEmail(email).then(res => {
+      return Promise.resolve('Email was successfully sent')
+    }).catch(e => {
+      return Promise.reject(e);
+    })
   }
 }
 

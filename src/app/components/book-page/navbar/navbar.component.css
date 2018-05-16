@@ -1,0 +1,9 @@
+small {
+    color: white
+}
+.a, a {
+    cursor: pointer
+}
+.a:hover {
+    color: rgb(0, 132, 255);
+}

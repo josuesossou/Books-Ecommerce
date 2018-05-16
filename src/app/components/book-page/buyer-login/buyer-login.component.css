@@ -8,10 +8,9 @@ small, h5{
 button{
     cursor: pointer;
 }
-/* h5 {
-    position: absolute;
-    text-align: center;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 10vh;
-} */
+.register {
+    color: rgb(24, 255, 24)
+}
+.card {
+    border-radius: 8px ;
+}

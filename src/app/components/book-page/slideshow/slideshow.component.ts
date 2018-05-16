@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
 
@@ -10,8 +10,9 @@ import { Book } from '../../../model/book';
   styleUrls: ['./slideshow.component.css']
 })
 export class SlideshowComponent implements OnInit {
+  @Input('Books') booksData:Book[];
 
-  books:Book[];
+  books:Book[] = []
   book:Book;
   uids:String[];
   loader:boolean;
@@ -24,52 +25,12 @@ export class SlideshowComponent implements OnInit {
 
   ngOnInit() {
     this.loader = true;
-    this.payoutService.auth().subscribe(auth=>{
-      if(auth){
 
-        this.bkData.getUserIds().subscribe(data=>{
-          this.uids = [];
-          for(let d of data){
-            this.uids.push(d.key);
-          }
-          this.getBooks();
-        });
-
-      }else{
-
-        this.payoutService.loginAnonymously().then(()=>{
-          this.bkData.getUserIds().subscribe(data=>{
-            this.uids = [];
-            for(let d of data){
-              this.uids.push(d.key);
-            }
-            this.getBooks();
-          });
-        });
-        
-      }
-    })
-    
-  }
-
-
-  getBooks(){
-    this.books = [];
-    for(const id of this.uids){
-    
-      this.bkData.getUserForSaleBooks(id).subscribe(data=>{
-        if(!data)return;
-
-          for(let i = 0; i<9; i++){
-            this.book = JSON.parse(data[i].payload.val()); 
-            
-            let lastNumb = this.book.image.length - 1;
-            this.book.image = this.book.image.slice(4,lastNumb);
-
-            this.books.unshift(this.book);
-          }
-        this.loader = false
-      });
+    for(let i = 0; i<9; i++){
+      this.book = this.booksData[i]; 
+      this.books.unshift(this.book);
     }
+    
+    this.loader = false
   }
 }

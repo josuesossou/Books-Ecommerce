@@ -12,44 +12,53 @@ export class BooksDataService {
   userId:string;
   userName:string;
   email:string;
+  auth;
   constructor(    
     private afdb:AngularFireDatabase,
     private afAuth:AngularFireAuth) { 
-      this.afAuth.authState.subscribe((auth) =>{
-        if(auth) {
-          this.userId = auth.uid;
-          this.userName = auth.displayName;
-          this.email = auth.email;
-        }
+      this.afAuth.authState.subscribe((auth) => {
+        this.auth = auth;
+        if(!auth || auth.isAnonymous) return;
+
+        this.userId = auth.uid;
+        this.userName = auth.displayName;
+        this.email = auth.email;
       });
   }
   //push books owned by the user to the inventory
   booksInventory(id, book:Book){
+    if (!this.auth) return;
     return this.afdb.object(`/sellbooks/${this.userId}/inventory/${id}`).set(JSON.stringify(book));
   }
 
   ///get books from the inventory
   getInventoryBooks(id){
+    if (!this.auth) return;
     return this.afdb.list(`/sellbooks/${id}/inventory`).snapshotChanges(['child_added']); 
   }
 
   ///get books from the inventory
   getPurchasedBooks(uid){
+    if (!this.auth) return;
     return this.afdb.list(`/buyBooks/${uid}`).snapshotChanges(['child_added']); 
   }
 
   //set book sold data
   bookSold(id, book:Book){
+    if (!this.auth) return;
     return this.afdb.object(`/sellbooks/${this.userId}/soldBook/${id}`).set(JSON.stringify(book));
   }
 
   //sold books 
   getBookSold(id){
+    if (!this.auth) return;
     return this.afdb.list(`/sellbooks/${id}/soldBook`).snapshotChanges(['child_added']); 
   }
   
   //pushing a book that the user wants to sell to under the user's uid and forsale bok in firebase
   sellBook(id, book:Book){
+    if (!this.auth) return;
+
     let time = new Date;
     
     book.seller = this.userName;
@@ -62,36 +71,43 @@ export class BooksDataService {
 
   //updating the book that has been bought
   updateSoldBook(bkid, uid, book:Book){
+    if (!this.auth) return;
     return this.afdb.object(`/sellbooks/${uid}/forSale/${bkid}`).set(JSON.stringify(book));
   }
 
   //saving books user bought (buid--> buyer user id)
   saveBuyBook(bkid, buyerid, book:Book){
+    if (!this.auth) return;
     return this.afdb.object(`/buyBooks/${buyerid}/${bkid}`).set(JSON.stringify(book));
   }
 
   //getting all books data under every users forsale books node in firebase to the store component
   getUserForSaleBooks(id){
+    if (!this.auth) return;
     return this.afdb.list(`/sellbooks/${id}/forSale`).snapshotChanges(['child_added']); 
   }
 
   //getting all the users uids in firebase and used them to get the all the books using getForSaleBooks
   getUserIds(){
+    if (!this.auth) return;
     return this.afdb.list(`/sellbooks`).snapshotChanges(['child_added']); 
   }
 
   //getting one book data to the buy-book page
   getForSaleBook(isbn, uid){
-    return this.afdb.object(`/sellbooks/${uid}/forSale/${isbn}`).snapshotChanges(); 
+    if (!this.auth) return;
+    return this.afdb.object(`/sellbooks/${uid}/forSale/${isbn}`).snapshotChanges();
   }
 
   //removing a particular book from the user inventory node in Firebase
   removeFromInv(id){
-    return this.afdb.list(`/sellbooks/${this.userId}/inventory/${id}`).remove()
+    if (!this.auth) return;
+    return this.afdb.list(`/sellbooks/${this.userId}/inventory/${id}`).remove();
   }
 
   //removing a particular book from the user forsale node in Firebase
   removeFromStore(id){
+    if (!this.auth) return;
     return this.afdb.list(`/sellbooks/${this.userId}/forSale/${id}`).remove()
   }
   

@@ -35,43 +35,38 @@ export class RegisterComponent implements OnInit {
   onSubmit(){
     if(this.password === this.repassword){
       this.passwordDonMatch = false;
+
       const userData:UserData = {
         fullName: this.fullName,
         email: this.email,
         business: this.business,
       }
-
+      
+      this.payoutService.auth().subscribe(auth => {
+        if (auth) this.payoutService.logout();
+      })
+      
       this.payoutService.register(this.email, this.password, this.business, userData)
-        .then(res=>{
+        .then(res => {
           this.flashMessage.show('A verification Email has been sent. Important! Verify your account before Login in',
                                  {cssClass:'alert-success ', timout:9000});
           this.router.navigate(['/login']);
         }).catch(err => {
-
           if (err.code === 'auth/email-already-in-use') {
-            this.flashMessage.show('Your account is not registered as seller account', {cssClass:'alert-danger', timeout:5000});
+            if(confirm('You already have an Account that has not been registered. Would you like to register now?')) {
+              this.payoutService.loginWithEmailAndPassword(this.email, this.password, false).then(res => {
+                if (!res) return this.flashMessage.show('Your account is not verified, therefore it was removed.', {cssClass:'alert-danger', timeout:5000});
 
-            if(confirm('Would you like to register to seller Account?')) {
-              return this.payoutService.loginWithEmailAndPassword(this.email, this.password, false).then(res => {
-                if (!res) return this.flashMessage.show('Your account is not verified, therefore removed.', {cssClass:'alert-danger', timeout:5000});
-
-                this.payoutService.auth().subscribe(auth => {
-                  this.payoutService.updateRegister(auth.uid, userData);
-                  this.router.navigate(['/sell-book']);
-                });
-                return;
+                this.flashMessage.show('You successfully registered', {cssClass:'alert-success', timeout:5000});
+                this.payoutService.updateProfile(this.business, userData);
+                this.router.navigate(['/sell-book']);
               });
-            } else {
-              this.flashMessage.show(err.message, {cssClass:'alert-danger', timeout:5000});
-              this.router.navigate(['/register']);
-
-              return;
-            }
+            } 
+          } else {
+            this.flashMessage.show(err.message, {cssClass:'alert-danger', timeout:5000});
+            this.router.navigate(['/register']);
           }
-
-          this.flashMessage.show(err.message, {cssClass:'alert-danger', timeout:5000});
-          this.router.navigate(['/register']);
-        })
+        });
 
     }else{
       this.passwordDonMatch = true;

@@ -15,6 +15,7 @@ export class StoreComponent implements OnInit {
   books:Book[];
   book:Book;
   uids:String[];
+  loader:boolean;
 
   constructor(
     public bkData:BooksDataService,
@@ -22,16 +23,13 @@ export class StoreComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loader = true;
     this.payoutService.auth().subscribe(auth=>{
-      if(auth){
+      if(!auth){
+        this.payoutService.loginAnonymously();
         this.getAllBooks();
       }else{
-        this.payoutService.deleteAnonymousUser().then(res => {
-          this.payoutService.loginAnonymously().then(()=>{
-            this.getAllBooks();
-          });
-          console.log(res);
-        })      
+        this.getAllBooks();
       }
     })
     
@@ -54,19 +52,28 @@ export class StoreComponent implements OnInit {
       this.bkData.getUserForSaleBooks(id).subscribe(data=>{
         for(let d of data){
           this.book = JSON.parse(d.payload.val());
+
           this.book.changePrice = false;
+
+          let lastNumb = this.book.image.length - 1;
+          this.book.image = this.book.image.slice(4,lastNumb);
+
           if(this.book.title_long.length > 23){
             this.book.title_long = this.book.title_long.slice(0,23)+"...";
           }
+
           if(this.book.authors[0].length > 14){
             this.book.authors[0]=this.book.authors[0].slice(0,14)+"..."
           }
+          
           this.books.unshift(this.book);
         }
 
         this.books.sort(function(a,b){
           return b.time - a.time
         });
+
+        this.loader = false;
       });
     }
   }

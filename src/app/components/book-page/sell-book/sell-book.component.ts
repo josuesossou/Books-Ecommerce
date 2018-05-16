@@ -53,7 +53,6 @@ export class SellBookComponent implements OnInit {
         this.bookSlides(0);
         
       }, error => {
-        console.log('erro function', error);
         this.loader = false;
         this.isBckLoaded =false
       })
@@ -119,12 +118,10 @@ export class SellBookComponent implements OnInit {
 
     this.loader = false;
     this.isBckLoaded = true;
-    console.log(this.books);
   }
 
   //add book to firebase database
   addBooks(book:Book){
-    console.log(book);
     this.bookData.booksInventory(book.isbn, book);
   }
 

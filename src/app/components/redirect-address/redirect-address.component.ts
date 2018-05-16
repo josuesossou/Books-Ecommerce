@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { PayoutService } from '../../services/payout.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Client } from '../../model/interface';
 import { Location } from '@angular/common';
 import { Charges } from '../../model/interface';
@@ -29,8 +29,6 @@ export class RedirectAddressComponent implements OnInit {
     zip:'',
     country:''
   }
-  test:Charges;
-  id:string;
 
   book:Book;
   handler:any;
@@ -49,18 +47,50 @@ export class RedirectAddressComponent implements OnInit {
     public router:Router,
     public payoutService:PayoutService,
     private location:Location,
-
-
-    // public route:ActivatedRoute,
     public bkData:BooksDataService,
+    public route:ActivatedRoute,
   ) { 
 
   }
 
   ngOnInit() {
-    this.payoutService.auth().subscribe((auth)=>{ 
-      this.id = auth.uid   
-    })
+    this.loader = true;
+    this.isbn = this.route.snapshot.paramMap.get('isbn');
+    this.uid = this.route.snapshot.paramMap.get('uid');
+
+    let formatPrice:number;
+    let newFormatPrice;
+    let lastNumb;
+    let now;
+    let postedDate;
+
+    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
+      this.book = JSON.parse(book.payload.val());
+
+      if (!this.book) return this.router.navigate(['/']);
+
+      if (this.book.sold) return this.router.navigate(['/']);
+
+      formatPrice = this.book.price * 100;
+      newFormatPrice = formatPrice.toString().split('.');
+      this.price = newFormatPrice[0];
+      //formating book.time to a local date format
+      now = new Date().toLocaleString();
+      postedDate = new Date(this.book.time).toLocaleDateString();
+      //seting up a description that will be used to track the type of book the user paid for
+      this.description = `${now} - Bought ${this.book.title} | ${this.book.isbn} book from ${this.book.seller}. Posted on ${postedDate}`;
+      this.loader = false;
+    });
+
+    this.payoutService.auth().subscribe((auth) => { 
+      if (!auth || auth.isAnonymous){
+        this.router.navigate(['/']);
+      } else {
+        this.name = auth.displayName;
+        this.userId = auth.uid;
+        this.userEmail = auth.email;
+      }
+    });    
   }
 
   // updateClient({value, valid}:{value:Client, valid:boolean}){
@@ -95,36 +125,12 @@ export class RedirectAddressComponent implements OnInit {
   // }
 
   updateClient({value, valid}:{value:Client, valid:boolean}) {
-    this.payoutService.clientAddress(this.id, value).then(() => {
-
-      this.payoutService.auth().subscribe(auth=>{
-        if(!auth || auth.displayName == null){
-          this.payoutService.loginUsingGoogle().then((res)=>{
-            this.userInfo = res;
-            
-            this.userId = this.userInfo.user.uid;
-            this.name = this.userInfo.user.displayName;
-            this.userEmail = this.userInfo.user.email;
-
-            return this.name;
-          }).then(()=>{
-            this.configureStripeCheckout();
-          });
-          
-          return;
-        }
-        this.name = auth.displayName;
-        this.userId = auth.uid;
-        this.userEmail = auth.email;
-        this.configureStripeCheckout();
-      });
+    this.payoutService.clientAddress(this.userId, value).then(() => {
+      this.configureStripeCheckout();
     });
-
-
   }
 
   configureStripeCheckout(){
-
     this.handler = StripeCheckout.configure({
       key: environment.stripekey,
       image: "https://stripe.com/img/documentation/checkout/marketplace.png",
@@ -138,7 +144,7 @@ export class RedirectAddressComponent implements OnInit {
   }
 
   handlePayment(name, describe) {
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book=>{
+    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
       let nbook:Book = JSON.parse(book.payload.val());
       if(!nbook.sold){
         this.handler.open({

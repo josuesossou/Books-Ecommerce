@@ -1,48 +1,53 @@
 <div class="row text-center">
-    <div class="car col-11 col-md-5 col-lg-4 mx-auto pt-5">
-      <div class="card mt-5 pb-3 mb-5">
-        <div class="card-block">
-          <h2 class="text-center mb-4 mt-2">Login</h2>
-          <div class="container">
-            <form (submit)="onSubmit()" class="mb-4">
-              <!-- email -->
-              <div class="form-group">
-                <input type="email" placeholder="Email"
-                [(ngModel)]="email" 
-                #emailId = "ngModel"
-                [ngClass]="{'is-invalid': emailId.errors?.required && emailId.touched || emailId.errors?.pattern}"
-                name="email" 
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                class="form-control"
-                required>
-                <div *ngIf = "emailId.errors?.required && emailId.touched" class="invalid-feedback"> email is required</div>
-                <div *ngIf = "emailId.errors?.pattern && emailId.touched" class="invalid-feedback"> email is invalid</div>
-              </div>
-              <!-- password -->
-              <div class="form-group">
-                <input type="password" 
-                placeholder="Password" 
-                required 
-                [(ngModel)]="password" 
-                name="password"
-                #passwordId = "ngModel" 
-                [ngClass]="{'is-invalid': passwordId.errors?.required && passwordId.touched || passwordId.errors?.minlength}"
-                minlength="6" 
-                class="form-control">
-                <div *ngIf="passwordId.errors?.required && passwordId.touched" class="invalid-feedback"> Password is required</div>
-                <div *ngIf="passwordId.errors?.minlength && passwordId.touched" class="invalid-feedback"> Password must be at least 6 characters</div>
-              </div>
-              <button routerLink="/register" class="btn btn-link btn-sm">Don't have a seller account? Register</button>
-              <button routerLink="/reset-password" class="btn btn-link btn-sm">Forgot Password?</button>
-              <input type="submit" class="btn btn-primary btn-block mt-3" value="Login" *ngIf="!resendingVirification">
-              <input type="submit" class="btn btn-primary btn-block mt-3" value="Resend Email Verification" *ngIf="resendingVirification">
-            </form>
-            <button class="btn btn-link btn-sm" (click)="resendingVirification = true" *ngIf="!resendingVirification">Resend a Verification Email?</button>
-            <button class="btn btn-link btn-sm" (click)="resendingVirification = false" *ngIf="resendingVirification">Login</button>
-          </div>
+  <div class="car col-11 col-md-5 col-lg-4 mx-auto pt-5">
+    <div class="card mt-5 pb-3 mb-5">
+      <div class="card-block">
+        <h2 *ngIf="!resendingVirification" class="text-center mb-4 mt-2">Login</h2>
+        <h2 *ngIf="resendingVirification" class="text-center mb-4 mt-2">Verification</h2>
 
+        <div class="container">
+          <form (submit)="onSubmit()" class="mb-4 text-left">
+            <!-- email -->
+            <label>Email</label>
+            <div class="form-group">
+              <input type="email" placeholder="Email"
+              [(ngModel)]="email" 
+              #emailId = "ngModel"
+              [ngClass]="{'is-invalid': emailId.errors?.required && emailId.touched || emailId.errors?.pattern}"
+              name="email" 
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+              class="form-control"
+              required>
+              <div *ngIf = "emailId.errors?.required && emailId.touched" class="invalid-feedback"> email is required</div>
+              <div *ngIf = "emailId.errors?.pattern && emailId.touched" class="invalid-feedback"> email is invalid</div>
+            </div>
+
+            <!-- password -->
+            <label>Password</label>
+            <div class="form-group">
+              <input type="password" 
+              placeholder="Password" 
+              required 
+              [(ngModel)]="password" 
+              name="password"
+              #passwordId = "ngModel" 
+              [ngClass]="{'is-invalid': passwordId.errors?.required && passwordId.touched || passwordId.errors?.minlength}"
+              minlength="6" 
+              class="form-control">
+              <div *ngIf="passwordId.errors?.required && passwordId.touched" class="invalid-feedback"> Password is required</div>
+              <div *ngIf="passwordId.errors?.minlength && passwordId.touched" class="invalid-feedback"> Password must be at least 6 characters</div>
+            </div>
+            <button routerLink="/register" class="btn btn-link btn-sm">Don't have a seller account? Register</button>
+            <button routerLink="/reset-password" class="btn btn-link btn-sm">Forgot Password?</button>
+            <input type="submit" class="btn btn-primary btn-block mt-3" value="Login" *ngIf="!resendingVirification">
+            <input type="submit" class="btn btn-primary btn-block mt-3" value="Resend Email Verification" *ngIf="resendingVirification">
+          </form>
+          <button class="btn btn-link btn-sm" (click)="resendingVirification = true" *ngIf="!resendingVirification">Resend a Verification Email?</button>
+          <button class="btn btn-link btn-sm" (click)="resendingVirification = false" *ngIf="resendingVirification">Login</button>
         </div>
       </div>
     </div>
-    <h5 *ngIf="!isVerified" class="mx-auto pt-3 mb-5 m-0 col-12">Your account was not verified; therefore, it was deleted. You must Re-register</h5>
   </div>
+  <h5 *ngIf="!isVerified" class="mx-auto pt-0 mb-5 m-0 col-12">Your account was not verified; therefore, it was deleted. You must Re-register</h5>
+  <!-- <h5 *ngIf="registered" class="mx-auto pt-3 mb-5 m-0 col-12">Please Verify your Email before login attempt.</h5> -->
+</div>

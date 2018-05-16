@@ -51,7 +51,6 @@ export class BuyBookProccessComponent implements OnInit {
   proccessBuyBook(){
     // this.description = `${d}: Bought ${this.book.isbn} from ${this.book.seller}`;
     // this.description = `${now}: Bought ${this.book.isbn} book from ${this.book.seller}. Posted on: ${postedDate}`;
-    console.log('working')
     this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(b=>{
       let book:Book = JSON.parse(b.payload.val());
       let postedDate = new Date(book.time).toLocaleDateString();
@@ -90,10 +89,8 @@ export class BuyBookProccessComponent implements OnInit {
                   break;
 
                 }else if(description !== chargeDescription[1]){
-
                   this.router.navigate(['/']);
                   this.flashMessage.show(`Failed to purchase ${book.title}`, {cssClass:'alert-danger', timeout:5000});
-
                 }
               }
             }

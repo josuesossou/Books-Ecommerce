@@ -1,24 +1,41 @@
-<app-slideshow></app-slideshow>
-<div class="books-collection">
+<div class="containe mx-auto" *ngIf="loader">
+  <div class="dot-container">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>  
+  </div>
+  <div class="dot-container">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>  
+  </div>
+  <div class="dot-container">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>  
+  </div>
+</div>
+
+<div class="books-collection pb-5" *ngIf="!loader">
+  <app-slideshow [Books]="books"></app-slideshow>
 
   <div class="container">
     <div class="row">
-
       <div *ngFor="let book of books" class="card border-light text-left col-12 col-sm-12 col-md-4 col-lg-3" [class.card-sold]="book.sold" [class.card-not-sold]="!book.sold">
         <a routerLink="/buy-book/{{book.uid}}/{{book.isbn}}">
-          <div class="card-img-top mx-auto" [style.backgroundImage]="book.image"></div>
+          <img class="mx-auto" [src]="book.image" alt="Not supported by browser" 
+          style="display: block; width: 8rem; height: 13rem;">
         </a>
+
         <div class="card-body m-3">
           <p class="card-title"><strong>Title: </strong> {{book.title_long}}</p>
           <p class="card-text"><strong>Authors: </strong>{{book.authors[0]}}</p>
         </div>
-        <div class="sold-card"  *ngIf="book.sold">
+
+        <div class="sold-card" *ngIf="book.sold">
           <a>Sold</a>
         </div>
       </div>
-      
-    
     </div>
   </div>
-
 </div>

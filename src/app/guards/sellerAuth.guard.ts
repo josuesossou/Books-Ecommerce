@@ -18,24 +18,19 @@ export class SellerAuthGuard implements CanActivate{
   
     }
 
-   
-
-    canActivate():Observable<boolean>{
-        
+    canActivate():Observable<boolean>{     
         const user = this.afAuth.auth.currentUser;
-
-        if (user.isAnonymous) {
-            this.router.navigate(['/']);
+        if (!user || user.isAnonymous) {
+            this.router.navigate(['/login']);
             return;
         }
-        
-        this.afAuth.authState.subscribe(auth => {
-            this.uid = auth.uid;
-        });
+
+        this.uid = user.uid;
 
         return this.afdb.list('/registered').valueChanges().map((userIds:UserData[])=>{
             const uids = userIds.filter((userId) => userId.uid === this.uid);
             if(uids.length === 0){
+                this.router.navigate(['/login']);
                 return false
             }else{
                 return true

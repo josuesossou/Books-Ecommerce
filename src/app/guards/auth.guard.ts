@@ -17,29 +17,26 @@ export class AuthGuard implements CanActivate{
 
    
 
-    canActivate():Observable<boolean>{
+    canActivate():boolean{
 
         const user = this.afAuth.auth.currentUser;
 
-        if (user.isAnonymous) {
+        if (!user || user.isAnonymous) {
             this.router.navigate(['/']);
-            return;
+            return false;
         }
 
-        return this.afAuth.authState.map(auth => {
-            if(!auth){
+        if (this.bUser != undefined){
+            if(this.bUser !== user.uid){
                 this.router.navigate(['/']);
                 return false
-            }else if(this.bUser != undefined){
-                if(this.bUser !== auth.uid){
-                    return false
-                }else{
-                    return true
-                }
-            }else {
-                return true;
+            }else{
+                return true
             }
-        })
+        }else {
+            return true;
+        }
+        
             
     }
 

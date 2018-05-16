@@ -13,23 +13,14 @@ export class BuyerAuthGuard implements CanActivate{
 
    
 
-    canActivate():Observable<boolean>{
+    canActivate():boolean{
         const user = this.afAuth.auth.currentUser;
 
-        if (user.isAnonymous) {
+        if (!user || user.isAnonymous) {
             this.router.navigate(['/']);
-            return;
+            return false;
         }
-
-        return this.afAuth.authState.map(auth => {
-            if(!auth){
-                this.router.navigate(['/store']);
-                return false
-            }else{
-                return true;
-            }
-        })
-            
+        return true;    
     }
 
 

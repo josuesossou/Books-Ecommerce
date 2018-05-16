@@ -27,7 +27,9 @@ export class PasswordResetComponent implements OnInit {
 
   resetPassword() {
     this.payoutService.resetPassword(this.email).then(res => {
-      console.log(res)
+      this.flashMessage.show(res, {cssClass:'alert-success ', timout:5000});
+    }).catch(e => {
+      this.flashMessage.show(e.messages, {cssClass:'alert-success ', timout:5000});
     })
   }
 

@@ -42,145 +42,145 @@ export class TopContentComponent implements OnInit {
   ngOnInit() {
   }
 
-  proceedPayement(price){
+  // proceedPayement(price){
     
-    if (price == 1099) {
+  //   if (price == 1099) {
 
-      this.isWatchOnline = true;
+  //     this.isWatchOnline = true;
       
-      this.payoutService.loginUsingGoogle().then(res=>{
+  //     this.payoutService.loginUsingGoogle().then(res=>{
 
-      this.payoutService.auth().subscribe((auth)=>{    
-        this.email = auth.email;
-          this.payoutService.checkCharge(auth.uid).subscribe(charges =>{
+  //     this.payoutService.auth().subscribe((auth)=>{    
+  //       this.email = auth.email;
+  //         this.payoutService.checkCharge(auth.uid).subscribe(charges =>{
 
-              if (charges.length == 0) {
+  //             if (charges.length == 0) {
 
-                this.handler = StripeCheckout.configure({
-                  key: environment.stripekey,
-                  image: "https://stripe.com/img/documentation/checkout/marketplace.png",
-                  locale: "auto",
-                  email: this.email,
-                  token: token => {
-                    this.payoutService.processPayment(token, price, "Perfect turkey", this.email)
-                  }
-                });
+  //               this.handler = StripeCheckout.configure({
+  //                 key: environment.stripekey,
+  //                 image: "https://stripe.com/img/documentation/checkout/marketplace.png",
+  //                 locale: "auto",
+  //                 email: this.email,
+  //                 token: token => {
+  //                   this.payoutService.processPayment(token, price, "Perfect turkey", this.email)
+  //                 }
+  //               });
                 
-                this.handlePayment(auth.displayName, price, this.sdOnlineVideo);
+  //               this.handlePayment(auth.displayName, price, this.sdOnlineVideo);
 
-              } else {
+  //             } else {
   
-                for (var i = 0; i < charges.length; i++) {
+  //               for (var i = 0; i < charges.length; i++) {
 
-                  this.test = charges[i];
+  //                 this.test = charges[i];
               
-                  if (this.test.charge.amount_refunded == 0 && this.test.charge.paid) {
+  //                 if (this.test.charge.amount_refunded == 0 && this.test.charge.paid) {
 
-                    this.router.navigate(['video']);
+  //                   this.router.navigate(['video']);
 
-                    break
+  //                   break
 
-                  } else{
+  //                 } else{
 
-                    alert('An error has occuured');
+  //                   alert('An error has occuured');
 
-                    break
-                  }
+  //                   break
+  //                 }
                               
-              }
+  //             }
 
-            }
+  //           }
 
-          });
+  //         });
       
-        })
+  //       })
 
-      })
+  //     })
 
-    }else if(price == 1999 ){
+  //   }else if(price == 1999 ){
 
-      this.isWatchOnline = false;
-      this.payoutService.loginUsingGoogle().then(res=>{
+  //     this.isWatchOnline = false;
+  //     this.payoutService.loginUsingGoogle().then(res=>{
         
-        this.payoutService.auth().subscribe((auth)=>{       
+  //       this.payoutService.auth().subscribe((auth)=>{       
           
-          this.payoutService.checkCharge(auth.uid).subscribe(charges =>{
+  //         this.payoutService.checkCharge(auth.uid).subscribe(charges =>{
             
-            if (charges.length == 0) {
+  //           if (charges.length == 0) {
 
-              this.handler = StripeCheckout.configure({
-                key: environment.stripekey,
-                image: "https://stripe.com/img/documentation/checkout/marketplace.png",
-                locale: "auto",
-                email: this.email,
-                token: token => {
-                  this.payoutService.processPayment(token, price, "turkey", this.email,)
-                }
-              });
+  //             this.handler = StripeCheckout.configure({
+  //               key: environment.stripekey,
+  //               image: "https://stripe.com/img/documentation/checkout/marketplace.png",
+  //               locale: "auto",
+  //               email: this.email,
+  //               token: token => {
+  //                 this.payoutService.processPayment(token, price, "turkey", this.email,)
+  //               }
+  //             });
               
-              this.handlePayment(auth.displayName, price, this.sdDvDVideo);
+  //             this.handlePayment(auth.displayName, price, this.sdDvDVideo);
 
-            } else {
+  //           } else {
 
-              for (var i = 0; i < charges.length; i++) {
-                this.test = charges[i]
-                if (this.test.amount == 1999 && this.test.charge.paid && this.test.charge.amount_refunded == 0) {
-                  return alert('Already Ordered');
-                } else{
+  //             for (var i = 0; i < charges.length; i++) {
+  //               this.test = charges[i]
+  //               if (this.test.amount == 1999 && this.test.charge.paid && this.test.charge.amount_refunded == 0) {
+  //                 return alert('Already Ordered');
+  //               } else{
 
-                  this.handler = StripeCheckout.configure({
-                    key: environment.stripekey,
-                    image: "https://stripe.com/img/documentation/checkout/marketplace.png",
-                    locale: "auto",
-                    email: this.email,
-                    token: token => {
-                      this.payoutService.processPayment(token, price, "turkey", this.email,)
-                    }
-                  });
+  //                 this.handler = StripeCheckout.configure({
+  //                   key: environment.stripekey,
+  //                   image: "https://stripe.com/img/documentation/checkout/marketplace.png",
+  //                   locale: "auto",
+  //                   email: this.email,
+  //                   token: token => {
+  //                     this.payoutService.processPayment(token, price, "turkey", this.email,)
+  //                   }
+  //                 });
 
-                  this.handlePayment(auth.displayName, price, this.sdDvDVideo);
-                  break
-                }
+  //                 this.handlePayment(auth.displayName, price, this.sdDvDVideo);
+  //                 break
+  //               }
                             
-              }
+  //             }
 
-            } 
+  //           } 
 
-          });
+  //         });
       
-        })
+  //       })
 
-      })
+  //     })
 
-    }else{
-      return alert('Price not accepted')
-    }
+  //   }else{
+  //     return alert('Price not accepted')
+  //   }
 
     
-  }
+  // }
 
-  handlePayment(name, price,describe) {
+  // handlePayment(name, price,describe) {
     
-    this.handler.open({
-      name: 'Login as '+ name,
-      description: describe,
-      amount: price
-    });
+  //   this.handler.open({
+  //     name: 'Login as '+ name,
+  //     description: describe,
+  //     amount: price
+  //   });
 
   
-    if(this.isWatchOnline){
-      this.router.navigate(['confirm']);
-    }else {
-      this.router.navigate(['address']);
-    }
+  //   if(this.isWatchOnline){
+  //     this.router.navigate(['confirm']);
+  //   }else {
+  //     this.router.navigate(['address']);
+  //   }
     
-  }
+  // }
   
   
 
-  logout(){
-    this.payoutService.logout()
-  }
+  // logout(){
+  //   this.payoutService.logout()
+  // }
     
 
 }
