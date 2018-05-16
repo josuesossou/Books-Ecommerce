@@ -6,7 +6,7 @@
         <h2 *ngIf="resendingVirification" class="text-center mb-4 mt-2">Verification</h2>
 
         <div class="container">
-          <form (submit)="onSubmit()" class="mb-4 text-left">
+          <form novalidate #f="ngForm" (ngSubmit)="onSubmit(f)" class="mb-4 text-left">
             <!-- email -->
             <label>Email</label>
             <div class="form-group">

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
+import { Subscription } from "rxjs/Subscription";
+
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 import { BooksDataService } from '../../../../services/books-data.service';
@@ -13,7 +15,10 @@ import { Book } from '../../../../model/book';
   templateUrl: './sold-books.component.html',
   styleUrls: ['./sold-books.component.css']
 })
-export class SoldBooksComponent implements OnInit {
+export class SoldBooksComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkSubscription: Subscription;
 
   book:Book;
   soldBooks:Book[];
@@ -26,9 +31,8 @@ export class SoldBooksComponent implements OnInit {
     public flashMessage:FlashMessagesService) { }
 
   ngOnInit() {
-
-    this.payoutAuth.auth().subscribe(auth=>{
-      this.bkData.getBookSold(auth.uid).subscribe(data=>{
+    this.authSubscription = this.payoutAuth.auth().subscribe(auth=>{
+      this.bkSubscription = this.bkData.getBookSold(auth.uid).subscribe(data=>{
         this.soldBooks = [];
         for(let d of data){
           this.book = JSON.parse(d.payload.val());
@@ -38,7 +42,11 @@ export class SoldBooksComponent implements OnInit {
         }
       })
     })
+  }
 
+  ngOnDestroy() {
+    this.bkSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 
 }

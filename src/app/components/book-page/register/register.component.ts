@@ -32,7 +32,9 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(){
+  onSubmit({value, valid}:{value:Object, valid:boolean}){
+    if (!valid) return this.flashMessage.show('Please fill out the form', {cssClass:'alert-danger', timeout:5000});
+
     if(this.password === this.repassword){
       this.passwordDonMatch = false;
 
@@ -41,10 +43,6 @@ export class RegisterComponent implements OnInit {
         email: this.email,
         business: this.business,
       }
-      
-      this.payoutService.auth().subscribe(auth => {
-        if (auth) this.payoutService.logout();
-      })
       
       this.payoutService.register(this.email, this.password, this.business, userData)
         .then(res => {
@@ -68,9 +66,10 @@ export class RegisterComponent implements OnInit {
           }
         });
 
-    }else{
+    } else {
       this.passwordDonMatch = true;
     }
+    
   }
 
 }

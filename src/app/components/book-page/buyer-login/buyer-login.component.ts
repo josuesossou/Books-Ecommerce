@@ -49,7 +49,9 @@ export class BuyerLoginComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onSubmit({value, valid}:{value:Object, valid:boolean}) {
+    if (!valid) return this.flashMessage.show('Please fill out the form', {cssClass:'alert-danger', timeout:5000});
+
     if (this.isLogin) {
       this.payoutService.loginWithEmailAndPassword(this.email, this.password, true).then(res => {
         if (!res) return this.isVerified = false;

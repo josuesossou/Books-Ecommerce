@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from "rxjs/Subscription";
 
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
@@ -10,21 +11,25 @@ import { Book } from '../../../model/book';
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css']
 })
-export class StoreComponent implements OnInit {
+export class StoreComponent implements OnInit, OnDestroy {
 
-  books:Book[];
-  book:Book;
-  uids:String[];
-  loader:boolean;
+  private authSubscription: Subscription;
+  private booksSubscription: Subscription;
+  private bookSubscription: Subscription;
 
   constructor(
     public bkData:BooksDataService,
     public payoutService:PayoutService
   ) { }
 
+  books:Book[];
+  book:Book;
+  uids:String[];
+  loader:boolean;
+
   ngOnInit() {
     this.loader = true;
-    this.payoutService.auth().subscribe(auth=>{
+    this.authSubscription = this.payoutService.auth().subscribe(auth=>{
       if(!auth){
         this.payoutService.loginAnonymously();
         this.getAllBooks();
@@ -32,11 +37,16 @@ export class StoreComponent implements OnInit {
         this.getAllBooks();
       }
     })
-    
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
+    // this.booksSubscription.unsubscribe();
+    // this.bookSubscription.unsubscribe();
   }
 
   getAllBooks() {
-    this.bkData.getUserIds().subscribe(data=>{
+    this.booksSubscription = this.bkData.getUserIds().subscribe(data=>{
       this.uids = [];
       for(let d of data){
         this.uids.push(d.key);

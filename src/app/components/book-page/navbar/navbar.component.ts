@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Subscription } from "rxjs/Subscription";
 import { Router } from '@angular/router';
 import { PayoutService } from '../../../services/payout.service'
 
@@ -9,7 +10,9 @@ import { PayoutService } from '../../../services/payout.service'
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+
+  private authSubsription: Subscription;
 
   storeLink:boolean;
   isbn;
@@ -25,7 +28,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.payoutService.auth().subscribe(auth =>{
+    this.authSubsription = this.payoutService.auth().subscribe(auth =>{
       if(!auth || auth.isAnonymous) {
         this.loginDetails = '';
         this.isAuth = false;
@@ -36,13 +39,11 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  buyerLogin() {
-
-  }
-
   logout() {
     this.payoutService.logout();
-    this.router.navigate(['/']);
   }
 
+  ngOnDestroy() {
+    this.authSubsription.unsubscribe();
+  }
 }

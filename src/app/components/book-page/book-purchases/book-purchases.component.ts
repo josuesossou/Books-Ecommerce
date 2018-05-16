@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BooksDataService } from '../../../services/books-data.service';
+import { Subscription } from "rxjs/Subscription";
+
 import { PayoutService } from '../../../services/payout.service';
 
 import { Book } from '../../../model/book';
@@ -9,7 +11,10 @@ import { Book } from '../../../model/book';
   templateUrl: './book-purchases.component.html',
   styleUrls: ['./book-purchases.component.css']
 })
-export class BookPurchasesComponent implements OnInit {
+export class BookPurchasesComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkDataSubscription: Subscription;
 
   purchasedBooks:Book[];
   book:Book;
@@ -21,7 +26,6 @@ export class BookPurchasesComponent implements OnInit {
     public payoutService:PayoutService,) { }
 
   ngOnInit() {
-
     this.payoutService.auth().subscribe(auth=>{
       if(auth){
         this.user = auth.displayName;
@@ -36,6 +40,11 @@ export class BookPurchasesComponent implements OnInit {
       }
     });
 
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
+    this.bkDataSubscription.unsubscribe();
   }
 
 }

@@ -7,7 +7,7 @@
         <h2 *ngIf="resendingVirification" class="text-center mb-4 mt-2">Verification</h2>
 
         <div class="container">
-          <form class="mb-4 text-left" (submit)="onSubmit()">
+          <form class="mb-4 text-left" novalidate #f="ngForm"  (ngSubmit)="onSubmit(f)">
             <!-- full name -->
             <div class="form-group" *ngIf="isRegister">
               <label>Full Name</label>

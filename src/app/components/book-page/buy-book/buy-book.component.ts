@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from "rxjs/Subscription";
 
 import { environment } from '../../../../environments/environment.prod';
 import { BooksDataService } from '../../../services/books-data.service';
@@ -17,6 +18,10 @@ import { Charges } from '../../../model/interface';
 })
 export class BuyBookComponent implements OnInit, OnDestroy {
 
+  private authSubscription: Subscription;
+  private bkDataSubscription: Subscription;
+
+
   book:Book;
   handler:any;
   price:number;
@@ -31,7 +36,6 @@ export class BuyBookComponent implements OnInit, OnDestroy {
 
   isAnomousUser:boolean;
 
-
   constructor(
     public route:ActivatedRoute,
     public location:Location,
@@ -45,7 +49,7 @@ export class BuyBookComponent implements OnInit, OnDestroy {
     this.isbn = this.route.snapshot.paramMap.get('isbn');
     this.uid = this.route.snapshot.paramMap.get('uid');
 
-    this.payoutService.auth().subscribe(auth => {
+    this.authSubscription = this.payoutService.auth().subscribe(auth => {
       if (!auth) return this.router.navigate(['/']);
 
       if (auth.isAnonymous) {
@@ -64,7 +68,8 @@ export class BuyBookComponent implements OnInit, OnDestroy {
     let lastNumb;
     let now;
     let postedDate;
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
+    
+    this.bkDataSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
       this.book = JSON.parse(book.payload.val());
       // slicing the image url from url()---> saved in firebase as url(http...)
       lastNumb = this.book.image.length - 1;
@@ -92,6 +97,8 @@ export class BuyBookComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.bkDataSubscription.unsubscribe();
+    this.authSubscription.unsubscribe()
   }
 
 }

@@ -5,37 +5,48 @@ small{
 }
 
 .my-card .card-img-top{
-    width:8rem;
-    height: 13rem;
-    background-size:contain;
-    background-position:center;
-    background-repeat:no-repeat;
-    margin-bottom: 0;
+  width:8rem;
+  height: 13rem;
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  margin-bottom: 0;
 }
 .my-card{
-    border: 0 solid white;
+  border: 0 solid white;
 }
 .my-card button{
-    position: absolute;
-    bottom: 0;
+  position: absolute;
+  bottom: 0;
 }
 
 .nex, .prev{
-    position: absolute;
-    width: 5%;
-    height:100%;
-    background-color: rgba(0, 0, 0, 0);
-    z-index: 2;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, .2);
+  z-index: 2;
+}
+.nex p, .prev p {
+  position: absolute;
+  color: rgba(170, 170, 170, 0.493);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
 }
 .nex{
-    right: -5%;
+  right: -5%;
 }
 .prev{
-    left: -5%;
+  left: -5%;
 }
 .nex:hover, .prev:hover{
-    background-color: rgba(0, 0, 0, 0.4);
-    transition: .7s;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: .7s;
 }
 
 .book-amount-tracker{

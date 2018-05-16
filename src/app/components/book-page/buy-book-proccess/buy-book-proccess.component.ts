@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from "rxjs/Subscription";
+
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
 
@@ -11,12 +13,18 @@ import { Book } from '../../../model/book';
 import { Payment } from '../../../model/book';
 import { User } from '../../../model/book';
 import { Charges } from '../../../model/interface';
+
 @Component({
   selector: 'app-buy-book-proccess',
   templateUrl: './buy-book-proccess.component.html',
   styleUrls: ['./buy-book-proccess.component.css']
 })
-export class BuyBookProccessComponent implements OnInit {
+
+export class BuyBookProccessComponent implements OnInit, OnDestroy {
+
+  private authSubscription:Subscription;
+  private bkdataSubscription:Subscription;
+  private puchaseSubscription:Subscription;
 
   isbn;
   uid;
@@ -38,7 +46,7 @@ export class BuyBookProccessComponent implements OnInit {
     this.isbn = this.route.snapshot.paramMap.get('isbn');
     this.uid = this.route.snapshot.paramMap.get('uid');
     this.bUser = this.route.snapshot.paramMap.get('bUser');
-    this.payoutService.auth().subscribe(auth=>{
+    this.authSubscription = this.payoutService.auth().subscribe(auth=>{
       this.buyerName = auth.displayName
     })
 
@@ -48,17 +56,23 @@ export class BuyBookProccessComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    this.puchaseSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
+    this.bkdataSubscription.unsubscribe();
+  }
+
   proccessBuyBook(){
     // this.description = `${d}: Bought ${this.book.isbn} from ${this.book.seller}`;
     // this.description = `${now}: Bought ${this.book.isbn} book from ${this.book.seller}. Posted on: ${postedDate}`;
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(b=>{
+    this.bkdataSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(b=>{
       let book:Book = JSON.parse(b.payload.val());
       let postedDate = new Date(book.time).toLocaleDateString();
       let description = `${book.isbn} book from ${book.seller}. Posted on ${postedDate}`;
 
       if(!book.sold){
 
-        this.payoutService.getAllBckPurchases(this.bUser).subscribe(charges=>{
+        this.puchaseSubscription = this.payoutService.getAllBckPurchases(this.bUser).subscribe(charges=>{
           let chargeDescription;
           let charge:Payment;
           if(!charges || charges.length <= 0){

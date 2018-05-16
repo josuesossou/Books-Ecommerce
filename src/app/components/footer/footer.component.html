@@ -2,11 +2,6 @@
 <nav class="navbar navbar-expand-lg absolute-bottom col-12">
     <div class="mx-auto text-center col-12">
         <h6 class="mx-auto text-center font-weight-bold col-12"><i>Used Book Store</i></h6>
-
         <small class="mx-auto text-center col-12"><strong>Contact Info: </strong>Phone Number: 410-900-7342 | Email: sospell177@gmail.com</small>
-     
-        <small class="mx-auto text-center col-12" *ngIf="isAuth">Currently login as {{ loginDetails }}</small>
-     
-        <a *ngIf="isAuth" class="mx-auto col-12"(click)="logout()" href="">Logout</a>
     </div>
 </nav>

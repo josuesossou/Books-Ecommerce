@@ -12,12 +12,6 @@ const headerOptions = {
 
 @Injectable()
 export class IsbnBooksService {
-
-    
-  // apiKey = 'qlQcdBo1KP6Pj7vGt69L5qwrSvHhO6x4yD1fcuk1';
-
-  //&index1=isbn&value1=[ISBN]/book/9780134093413'
-
   constructor(public http:HttpClient, ) { }
 
   getBooks(searchable):Observable<Querry> {

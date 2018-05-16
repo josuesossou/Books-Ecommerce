@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common'
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { Subscription } from "rxjs/Subscription";
 
 import { BooksDataService } from '../../../../services/books-data.service';
 import { PayoutService } from '../../../../services/payout.service';
@@ -13,7 +14,10 @@ import { Book } from '../../../../model/book';
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.css']
 })
-export class InventoryComponent implements OnInit {
+export class InventoryComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkSubscription: Subscription;
 
   invtoryBooks:Book[];
   book:Book;
@@ -28,9 +32,9 @@ export class InventoryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.payoutService.auth().subscribe(auth=>{
+    this.authSubscription = this.payoutService.auth().subscribe(auth=>{
       this.seller = auth.displayName;
-      this.bkData.getInventoryBooks(auth.uid).subscribe(data=>{
+      this.bkSubscription = this.bkData.getInventoryBooks(auth.uid).subscribe(data=>{
         this.invtoryBooks = [];
         for(let d of data){
           this.book = JSON.parse(d.payload.val());
@@ -39,6 +43,11 @@ export class InventoryComponent implements OnInit {
         }
       })
     });
+  }
+
+  ngOnDestroy() {
+    this.bkSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 
   //remove a book from the inventory

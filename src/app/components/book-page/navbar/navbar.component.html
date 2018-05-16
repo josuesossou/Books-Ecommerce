@@ -10,7 +10,7 @@
           <small class="mx-auto text-center" *ngIf="isAuth">Login as {{ loginDetails }} &nbsp; |</small> 
         </li> 
         <li class="nav-item">
-          <small class="a" *ngIf="isAuth" (click)="logout()">Logout</small>
+          <small class="a" *ngIf="isAuth" (click)="logout()" routerLink="/">Logout</small>
         </li> 
       </ul>
 
@@ -22,10 +22,10 @@
           <a class="nav-link" routerLink="/sell-book"> Book Seller Account</a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link" routerLink="/register"> Register to Sell Books</a>
+          <a class="nav-link" (click)="logout()" routerLink="/register"> Register to Sell Books</a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link" *ngIf="!isAuth" routerLink="/buyer-login">Login</a>
+          <a class="nav-link" *ngIf="!isAuth" (click)="logout()" routerLink="/buyer-login">Login</a>
           <a class="nav-link" *ngIf="isAuth" routerLink="/book-purchased">Track Your Purchases</a>
         </li>
       </ul>

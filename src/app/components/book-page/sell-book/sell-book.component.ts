@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { IsbnBooksService } from '../../../services/isbn-books.service';
 import { Book } from '../../../model/book';
 import { Querry } from '../../../model/book';
@@ -10,7 +11,10 @@ import { PayoutService } from '../../../services/payout.service';
   templateUrl: './sell-book.component.html',
   styleUrls: ['./sell-book.component.css']
 })
-export class SellBookComponent implements OnInit {
+export class SellBookComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkSubscription: Subscription;
 
   books:Book[];
   bookObject:Book;
@@ -21,8 +25,6 @@ export class SellBookComponent implements OnInit {
   loader:boolean = false;
   isBckLoaded:boolean = false;
   userName:string;
-  // background = "url('https://images.isbndb.com/covers/25/59/9780061152559.jpg')";
-
 
   constructor(
     public isbnBooks:IsbnBooksService,
@@ -31,9 +33,13 @@ export class SellBookComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.payoutService.auth().subscribe(auth=>{
+    this.authSubscription = this.payoutService.auth().subscribe(auth=>{
       this.userName = auth.displayName;
     })
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
   }
 
   ///search for books on Isbn 
@@ -46,19 +52,16 @@ export class SellBookComponent implements OnInit {
       this.loader = true;
       this.isBckLoaded = false;
       this.indexbk = 0;
-      this.isbnBooks.getBooks(this.inputText).subscribe(booksQuerried => {
 
+      this.bkSubscription = this.isbnBooks.getBooks(this.inputText).subscribe(booksQuerried => {
         this.querryObject = booksQuerried;
   
         this.bookSlides(0);
-        
       }, error => {
         this.loader = false;
         this.isBckLoaded =false
       })
-
     }
-    
   }
 
   //viewing next set in books array
@@ -118,6 +121,7 @@ export class SellBookComponent implements OnInit {
 
     this.loader = false;
     this.isBckLoaded = true;
+    this.bkSubscription.unsubscribe();
   }
 
   //add book to firebase database

@@ -118,7 +118,8 @@ export class PayoutService {
 
 /************************************ ***********************************/
   logout(){
-    return this.afAuth.auth.signOut();
+    console.log(this.user)
+    if (this.user) return this.afAuth.auth.signOut();
   }
 
   updateRegister(uid:string, userData:UserData) {

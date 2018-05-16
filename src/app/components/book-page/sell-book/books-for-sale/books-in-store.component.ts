@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common'
+import { Subscription } from "rxjs/Subscription";
+
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 import { BooksDataService } from '../../../../services/books-data.service';
@@ -13,7 +15,10 @@ import { Book } from '../../../../model/book';
   templateUrl: './books-in-store.component.html',
   styleUrls: ['./books-in-store.component.css']
 })
-export class BooksInStoreComponent implements OnInit {
+export class BooksInStoreComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkSubscription: Subscription;
 
   forSale:Book[];
   book:Book;
@@ -27,8 +32,8 @@ export class BooksInStoreComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.payoutAuth.auth().subscribe(auth=>{
-      this.bkData.getUserForSaleBooks(auth.uid).subscribe(data=>{
+    this.authSubscription = this.payoutAuth.auth().subscribe(auth=>{
+      this.bkSubscription = this.bkData.getUserForSaleBooks(auth.uid).subscribe(data=>{
         this.forSale = [];
         for(let d of data){
           this.book = JSON.parse(d.payload.val());
@@ -38,7 +43,11 @@ export class BooksInStoreComponent implements OnInit {
         }
       });
     });
-    
+  }
+
+  ngOnDestroy() {
+    this.bkSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 
   changePrice(book){

@@ -1,6 +1,6 @@
 <div class="container mt-5 pt-5">
 
-  <small class="mr-5">Welcome {{userName | uppercase}}</small>
+  <small class="mr-5 mt-5">Welcome {{userName | uppercase}}</small>
 
   <h2 class="mb-4">Search Books</h2>
 
@@ -18,10 +18,10 @@
 
     <div class="row mx-auto position-relative mt-5 col-12">
 
-      <div class="nex" *ngIf="isBckLoaded" (click)="nexSlide()"></div>
-      <div class="prev"*ngIf="isBckLoaded"(click)="prevSlide()"></div>
+      <div class="nex" *ngIf="isBckLoaded" (click)="nexSlide()"><p>▶</p></div>
+      <div class="prev"*ngIf="isBckLoaded"(click)="prevSlide()"><p>◀</p></div>
 
-      <div class="book-amount-tracker" *ngIf="isBckLoaded">{{ indexbk }} / {{ total }}</div>
+      <div class="book-amount-tracker" *ngIf="isBckLoaded">Found {{ total + 1 }}</div>
       <!--  Spinner/loader -->
       <div class="containe mx-auto" *ngIf = "loader">
         <div class="dot-container">

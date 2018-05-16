@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Subscription } from "rxjs/Subscription";
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { PayoutService } from '../../services/payout.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,7 +19,10 @@ import { User } from '../../model/book';
   templateUrl: './redirect-address.component.html',
   styleUrls: ['./redirect-address.component.css']
 })
-export class RedirectAddressComponent implements OnInit {
+export class RedirectAddressComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
+  private bkSubscription: Subscription;
 
   client:Client = {
     fullname:'',
@@ -64,7 +68,7 @@ export class RedirectAddressComponent implements OnInit {
     let now;
     let postedDate;
 
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
+    this.bkSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
       this.book = JSON.parse(book.payload.val());
 
       if (!this.book) return this.router.navigate(['/']);
@@ -82,7 +86,7 @@ export class RedirectAddressComponent implements OnInit {
       this.loader = false;
     });
 
-    this.payoutService.auth().subscribe((auth) => { 
+    this.authSubscription = this.payoutService.auth().subscribe((auth) => { 
       if (!auth || auth.isAnonymous){
         this.router.navigate(['/']);
       } else {
@@ -93,38 +97,13 @@ export class RedirectAddressComponent implements OnInit {
     });    
   }
 
-  // updateClient({value, valid}:{value:Client, valid:boolean}){
-  //   this.payoutService.checkCharge(this.id).subscribe(charges =>{
-  //     if(charges.length == 0){
-  //       this.flashMessagesService.show('Payement was canceled', {cssClass:'alert-danger', timeout:5000});
-  //       this.router.navigate(['']);
-  //     }else{     
-  //       for (var i = 0; i < charges.length; i++) {
-  //         this.test = charges[i];
-
-  //         if (this.test.amount == 1999 && this.test.charge.amount_refunded == 0 && this.test.charge.paid) {
-
-  //           if (!valid) {
-  //             this.flashMessagesService.show('Please fill in all fields', {cssClass:'alert-danger', timeout:2000});
-  //             this.router.navigate(['address']);
-  //           }else{
-  //             this.payoutService.clientAddress(this.id, value);
-  //             this.flashMessagesService.show('client successfully Updated', {cssClass:'alert-success', timeout:5000});
-  //             this.router.navigate(['/perfect-turkey']);
-  //           }
-            
-  //           break
-            
-  //         } else{
-  //           this.flashMessagesService.show('You need to order a DvD', {cssClass:'alert-danger', timeout:5000});
-  //           this.router.navigate(['/perfect-turkey']);
-  //         }
-  //       }
-  //     }
-  //   })
-  // }
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
+    this.bkSubscription.unsubscribe();
+  }
 
   updateClient({value, valid}:{value:Client, valid:boolean}) {
+    if (!valid) return;
     this.payoutService.clientAddress(this.userId, value).then(() => {
       this.configureStripeCheckout();
     });
@@ -144,18 +123,13 @@ export class RedirectAddressComponent implements OnInit {
   }
 
   handlePayment(name, describe) {
-    this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
-      let nbook:Book = JSON.parse(book.payload.val());
-      if(!nbook.sold){
-        this.handler.open({
-          name: 'Login as '+name,
-          description: "Buying "+ describe,
-          amount: this.price
-        });
-        
-        this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
-      } 
-    })
+    this.handler.open({
+      name: 'Login as '+name,
+      description: "Buying "+ describe,
+      amount: this.price
+    });
+
+    this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
   }
 
   @HostListener('window:popstate', ['$event'])
