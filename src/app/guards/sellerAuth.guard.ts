@@ -6,19 +6,17 @@ import { Observable } from 'rxjs/Observable';
 import { UserData } from '../model/interface';
 
 @Injectable()
-export class SellerAuthGuard implements CanActivate{
+export class SellerAuthGuard implements CanActivate {
 
-    uid:string
+    uid: string;
 
     constructor(
-        private afAuth:AngularFireAuth,
-        private router:Router,
-        private afdb:AngularFireDatabase
-    ){ 
-  
-    }
+        private afAuth: AngularFireAuth,
+        private router: Router,
+        private afdb: AngularFireDatabase
+    ) {}
 
-    canActivate():Observable<boolean>{     
+    canActivate(): Observable<boolean> {
         const user = this.afAuth.auth.currentUser;
         if (!user || user.isAnonymous) {
             this.router.navigate(['/login']);
@@ -27,16 +25,14 @@ export class SellerAuthGuard implements CanActivate{
 
         this.uid = user.uid;
 
-        return this.afdb.list('/registered').valueChanges().map((userIds:UserData[])=>{
+        return this.afdb.list('/registered').valueChanges().map((userIds: UserData[]) => {
             const uids = userIds.filter((userId) => userId.uid === this.uid);
-            if(uids.length === 0){
+            if (uids.length === 0) {
                 this.router.navigate(['/login']);
-                return false
-            }else{
-                return true
+                return false;
+            } else {
+                return true;
             }
         });
     }
-
-
 }

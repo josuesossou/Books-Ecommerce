@@ -17,7 +17,17 @@
 </div>
 
 <div class="books-collection pb-5" *ngIf="!loader">
-  <app-slideshow [Books]="books"></app-slideshow>
+  <app-slideshow [books]="books"></app-slideshow>
+
+  <div class="stacy-chip">
+    <div class="stacy-chip-image"></div>
+    <div class="amount-order">
+      <input type="number" [(ngModel)]="chipAmount" /><br>
+      <small>Three Stacy's in one Pack. Order Now!</small>
+      <p>Total Price: {{ 5 * chipAmount }} Amount of Stacy's: 1 Pack x {{ chipAmount }}</p>
+      
+    </div>
+  </div>
 
   <div class="container">
     <div class="row">

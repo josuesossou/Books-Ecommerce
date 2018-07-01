@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { environment } from '../environments/environment.prod';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -12,7 +12,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
-//components
+// components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -41,7 +41,7 @@ import { BookPurchasesComponent } from './components/book-page/book-purchases/bo
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { PasswordResetComponent } from './components/book-page/password-reset/password-reset.component';
 
-//services
+// services
 import { PayoutService } from './services/payout.service';
 import { AuthGuard } from './guards/auth.guard';
 import { SellerAuthGuard } from './guards/sellerAuth.guard';
@@ -51,24 +51,25 @@ import { BooksDataService } from './services/books-data.service';
 import { BuyBookProccessComponent } from './components/book-page/buy-book-proccess/buy-book-proccess.component';
 import { ImgHeightDirective } from './directives/img-height.directive';
 import { BuyerLoginComponent } from './components/book-page/buyer-login/buyer-login.component';
+import { SendBookComponent } from './components/book-page/sell-book/send-book/send-book.component';
+import { ReturnBookComponent } from './components/book-page/book-purchases/return-book/return-book.component';
 
-const appRoutes:Routes = [
-  // {path:'perfect-turkey', component:HomeComponent},
-  // {path:'video', component:VideoComponent, canActivate:[AuthGuard]},
-  // {path:'confirm', component:RedirectConfirmComponent, canActivate:[AuthGuard]},
-  {path:'address/:isbn/:uid', component:RedirectAddressComponent, canActivate:[AuthGuard]},
-  {path:'sell-book', component:SellBookComponent, canActivate:[SellerAuthGuard]},
-  {path:'book-purchased', component:BookPurchasesComponent, canActivate:[BuyerAuthGuard]},
-  {path:'buy-book/:uid/:isbn', component:BuyBookComponent},
-  {path:'buy-book-process/:uid/:isbn/:bUser', component:BuyBookProccessComponent, canActivate:[AuthGuard]},
-  {path:'', component:StoreComponent},
-  {path:'reset-password', component:PasswordResetComponent},
-  {path:'buyer-login/:isbn/:uid', component:BuyerLoginComponent},
-  {path:'buyer-login', component:BuyerLoginComponent},
-  {path:'login', component:LoginComponent},
-  {path:'register', component:RegisterComponent},
-  {path:'**', component:NotfoundComponent}
-]
+const appRoutes: Routes = [
+  {path: 'address/:isbn/:uid', component: RedirectAddressComponent, canActivate: [AuthGuard]},
+  {path: 'sell-book', component: SellBookComponent, canActivate: [SellerAuthGuard]},
+  {path: 'book-purchased', component: BookPurchasesComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buy-book/:uid/:isbn', component: BuyBookComponent},
+  {path: 'buy-book-process/:uid/:isbn/:bUser', component: BuyBookProccessComponent, canActivate: [AuthGuard]},
+  {path: '', component: StoreComponent},
+  {path: 'send-book/:id', component: SendBookComponent, canActivate: [AuthGuard]},
+  {path: 'return-book/:id', component: ReturnBookComponent},
+  {path: 'reset-password', component: PasswordResetComponent},
+  {path: 'buyer-login/:isbn/:uid', component: BuyerLoginComponent},
+  {path: 'buyer-login', component: BuyerLoginComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: '**', component: NotfoundComponent}
+];
 
 @NgModule({
   declarations: [
@@ -101,7 +102,9 @@ const appRoutes:Routes = [
     BookPurchasesComponent,
     ImgHeightDirective,
     PasswordResetComponent,
-    BuyerLoginComponent
+    BuyerLoginComponent,
+    SendBookComponent,
+    ReturnBookComponent
   ],
   imports: [
     BrowserModule,

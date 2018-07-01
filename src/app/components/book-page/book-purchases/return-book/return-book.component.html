@@ -1,0 +1,73 @@
+<div class="container pt-5">
+    <!--  Spinner/loader -->
+    <div class="containe mx-auto" *ngIf="!book">
+      <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>  
+      </div>
+      <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>  
+      </div>
+      <div class="dot-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+      </div>
+    </div>
+   
+    <div class="card-row row p-3 ml-0 mt-2" *ngIf="book">
+      <div class="card-img mx-auto mr-md-auto mt-0 mb-3 pt-0 col-9 col-md-4 col-lg-3 col-xl-2 d-block" appImgHeight [style.backgroundImage]="book.image"></div>
+      <div class="card-body ml-3 pt-0 col-12 col-md-7 ml-md-auto ml-lg-1 d-inline-block">
+        <p class="card-title m-0 p-0"><strong>Title: </strong> {{book.title_long}}</p>
+        <p class="card-text p-0 m-0 mt-2"><strong>Isbn: </strong>{{book.isbn}}</p>
+        <p class="card-text p-0 m-0 mt-2"><strong>Authors: </strong>{{book.authors[0]}}</p>
+        <p class="card-text p-0 m-0 mt-2"><strong>Published Date: </strong>{{book.date_published}}</p> 
+      </div>
+    </div>
+  
+    <div *ngIf="address" class="mt-3">
+      <h4>Return Address</h4>
+      <small><strong>Return Address:</strong></small>
+      <small>{{address[0]}} {{address[1]}}</small><br>
+      <small style="margin-left: 4rem">{{address[2]}}, {{address[4]}} {{address[5]}}, {{address[3]}}</small>
+    </div>
+  
+    <div class="mt-3 mb-5">
+      <h4>Tracking Code</h4>
+      <p>Complete transaction by submitting the tracking code.</p>
+      <div>
+        <label for="code">Tracking Code</label>
+        <input 
+          class="form-control"
+          id="code"
+          type="text"
+          [(ngModel)]="code"
+          #codeField="ngModel"
+          [ngClass]="{'is-invalid':codeField.errors?.required && codeField.touched}"
+          required
+        />
+      </div>
+      <div class="mt-1 mb-4">
+        <label for="carrier">Choose Carrier</label>
+        <select 
+          id="carrier" 
+          class="form-control"
+          [(ngModel)]="carrier"
+          #carrierField="ngModel"
+          [ngClass]="{'is-invalid':carrierField.errors?.required && carrierField.touched}"
+          required
+        >
+          <option></option>
+          <option value="USPS">USPS</option>
+          <option value="UPS">UPS</option>
+          <option value="Fedex">FedEx</option>
+          <option value="DHL Express"> DHL Express</option>
+        </select>
+      </div>
+      <small style="color: rgb(255, 64, 64)">Your money will be automatically refunded after you submit a tracking code. Please wait in 2 to 3 business days to see changes in your account</small><br>
+      <button class="btn btn-primary btn-md mt-3" (click)="onsubmit()">Submit Tracking Code</button>
+    </div>
+  </div>

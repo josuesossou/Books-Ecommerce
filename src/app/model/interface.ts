@@ -1,36 +1,38 @@
-interface Charge{
-    amount_refunded?:number;
-    paid?:boolean;
+interface Charge {
+    amount_refunded?: number;
+    paid?: boolean;
 }
-interface Token{
-    used?:boolean;
+interface Token {
+    used?: boolean;
 }
 
 export interface Charges {
-    amount?:number;
-    charge?:Charge;
-    token?:Token;
+    amount?: number;
+    charge?: Charge;
+    token?: Token;
 }
 
 export interface Client {
-    fullname?:string;
-    addLine1?:string;
-    addLine2?:string;
-    city?:string;
-    state?:string;
-    zip?:string;
-    country?:string;
+    fullname?: string;
+    addLine1?: string;
+    addLine2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    country?: string;
 }
 
 export interface Videos {
-    mp4?:string;
-    webm?:string;
+    mp4?: string;
+    webm?: string;
 }
 
 export interface UserData {
-    fullName?:string;
-    email?:string;
-    business?:string;
-    gmailAccount?:string;
-    uid?:string;
+    fullName?: string;
+    email?: string;
+    business?: string;
+    gmailAccount?: string;
+    uid?: string;
+    address: Client;
+    stripeId: string;
 }

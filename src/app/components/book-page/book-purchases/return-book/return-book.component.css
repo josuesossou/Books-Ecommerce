@@ -1,17 +1,10 @@
-.success{
-    transition: display .6s ease-in-out;
-    display: none
-}
-.card {
-    border-radius: 8px ;
-}
-small, h5{
-    color: rgb(255, 82, 82)
-}
-button{
-    cursor: pointer;
-}
-
+.card-img{
+    background-size:100% 100%;
+    background-position:center;
+    background-repeat:no-repeat;
+ }
+ 
+ 
  /* loader/spinner */
  .containe,
  .dot-container {

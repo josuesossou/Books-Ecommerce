@@ -57,7 +57,18 @@
     line-height: 160%;
 }
 
-
+.stacy-chip {
+  position: absolute;
+  background-color: white;
+  top: 100px;
+  right: 20px;
+  flex-direction: row;
+  display: flex;
+}
+.stacy-chip-image {
+  height: 100px;
+  width: 100px;
+}
 
 /* loader/spinner */
 .containe,

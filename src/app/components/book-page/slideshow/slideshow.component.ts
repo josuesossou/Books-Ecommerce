@@ -10,27 +10,21 @@ import { Book } from '../../../model/book';
   styleUrls: ['./slideshow.component.css']
 })
 export class SlideshowComponent implements OnInit {
-  @Input('Books') booksData:Book[];
+  @Input() books: Book[];
 
-  books:Book[] = []
-  book:Book;
-  uids:String[];
-  loader:boolean;
+  book: Book;
+  uids: String[];
+  loader: boolean;
 
   constructor(
-    public bkData:BooksDataService,
-    public payoutService:PayoutService
+    public bkData: BooksDataService,
+    public payoutService: PayoutService
   ) { }
 
 
   ngOnInit() {
-    this.loader = true;
-
-    for(let i = 0; i<9; i++){
-      this.book = this.booksData[i]; 
-      this.books.unshift(this.book);
+    for (let i = 0; i < 9; i++) {
+      this.book = this.books[i];
     }
-    
-    this.loader = false
   }
 }
