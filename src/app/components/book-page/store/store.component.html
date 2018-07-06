@@ -20,13 +20,13 @@
   <app-slideshow [books]="books"></app-slideshow>
 
   <div class="stacy-chip">
-    <div class="stacy-chip-image"></div>
-    <div class="amount-order">
-      <input type="number" [(ngModel)]="chipAmount" /><br>
-      <small>Three Stacy's in one Pack. Order Now!</small>
-      <p>Total Price: {{ 5 * chipAmount }} Amount of Stacy's: 1 Pack x {{ chipAmount }}</p>
-      
+    <img src="../../../../assets/stacyschip.jpg" alt="Stacy's Chip" width="100px">
+    <div class="amount-order p-1" style="margin: 1rem">
+      <input type="number" [(ngModel)]="chipAmount" class="" min="1" maxlength="2"/><br>
+      <small>Three Stacy's in one Pack. Order Now!</small><br>
+      <small><strong>Price: {{ 5 * chipAmount | currency:0 }} | Amount of Stacy's: 1 Pack x {{ chipAmount }}</strong></small>
     </div>
+    <button class="btn btn-success btn-sm" (click)="orderStacyChip()">ORDER NOW!</button>
   </div>
 
   <div class="container">

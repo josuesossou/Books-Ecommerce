@@ -53,6 +53,7 @@ import { ImgHeightDirective } from './directives/img-height.directive';
 import { BuyerLoginComponent } from './components/book-page/buyer-login/buyer-login.component';
 import { SendBookComponent } from './components/book-page/sell-book/send-book/send-book.component';
 import { ReturnBookComponent } from './components/book-page/book-purchases/return-book/return-book.component';
+import { AdminComponent } from './components/book-page/admin/admin.component';
 
 const appRoutes: Routes = [
   {path: 'address/:isbn/:uid', component: RedirectAddressComponent, canActivate: [AuthGuard]},
@@ -104,7 +105,8 @@ const appRoutes: Routes = [
     PasswordResetComponent,
     BuyerLoginComponent,
     SendBookComponent,
-    ReturnBookComponent
+    ReturnBookComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

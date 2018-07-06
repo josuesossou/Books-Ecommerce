@@ -23,6 +23,10 @@ export interface Book {
     carrier?: string;
     carrierLink?: string;
     refunded?: boolean;
+    requestRefunds?: boolean;
+    returnCarrierLink?: string;
+    isReturn?: boolean;
+    returnCode?: string;
 }
 
 export interface Querry {
@@ -40,4 +44,7 @@ export interface User {
 }
 export interface Payment {
     description?: string;
+    amount?: number;
+    charge?: any;
+    token?: any;
 }

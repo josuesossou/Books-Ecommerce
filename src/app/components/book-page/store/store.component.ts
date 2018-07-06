@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Router } from '@angular/router';
 
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
 
 import { Book } from '../../../model/book';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-store',
@@ -20,7 +22,9 @@ export class StoreComponent implements OnInit, OnDestroy {
 
   constructor(
     public bkData: BooksDataService,
-    public payoutService: PayoutService
+    public payoutService: PayoutService,
+    public flashMessage: FlashMessagesService,
+    public router: Router,
   ) { }
 
   books: Book[];
@@ -28,6 +32,7 @@ export class StoreComponent implements OnInit, OnDestroy {
   uids: String[];
   loader: boolean;
   chipAmount = 1;
+  chipPrice = this.chipAmount * 5;
 
   ngOnInit() {
     this.loader = true;
@@ -88,5 +93,17 @@ export class StoreComponent implements OnInit, OnDestroy {
         this.loader = false;
       });
     }
+  }
+
+  orderStacyChip() {
+    if (this.payoutService.user.isAnonymous) {
+      return this.flashMessage.show(`Please Login and try again`, {cssClass: 'alert-danger', timeout: 3000});
+    }
+
+    if (this.chipAmount < 1 || this.chipAmount > 10) {
+      return this.flashMessage.show(`There is no order for 0 amount or less and more than 10`, {cssClass: 'alert-danger', timeout: 3000});
+    }
+
+    this.router.navigate([`address/stacy ${this.chipPrice}/${this.payoutService.user.uid}`]);
   }
 }

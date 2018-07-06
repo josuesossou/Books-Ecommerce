@@ -3,16 +3,14 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "serve": "firebase serve --only functions",
-    "shell": "firebase experimental:functions:shell",
+    "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "angular2-flash-messages": "^2.0.5",
-    "firebase-admin": "^5.5.1",
-    "firebase-functions": "^1.0.2",
-    "stripe": "^5.4.0"
+    "firebase-admin": "~5.12.1",
+    "firebase-functions": "^1.0.3"
   },
   "private": true
 }

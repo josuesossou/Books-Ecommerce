@@ -8,6 +8,7 @@ import { Client, UserData } from '../model/interface';
 export class PayoutService {
   userId: string;
   user;
+  token;
 
   constructor(
     private afdb: AngularFireDatabase,
@@ -21,13 +22,15 @@ export class PayoutService {
     });
   }
 
-   // Saving payement token to the firebase database
+  // Saving payement token to the firebase database
   processPayment(token: any, amount: number, description: string, receipt_email: string) {
     const payment = { token , amount, description, receipt_email };
     return this.afdb.list(`/payments/${this.userId}`).push(payment);
   }
 
   processBookPayment(token: any, amount: number, description: string, receipt_email: string) {
+    console.log(token);
+    this.token = token.id;
     const payment = { token , amount, description, receipt_email};
     return this.afdb.list(`/bookpayments/${this.userId}`).push(payment);
   }
@@ -93,6 +96,10 @@ export class PayoutService {
   // submiting an address on the redirect-address page
   clientAddress(id: String, value: Client) {
     return this.afdb.object(`/address/${id}`).set(JSON.stringify(value));
+  }
+
+  clientAddressStacys(id: String, value: Client) {
+    return this.afdb.object(`/stacyChipsAddress/${this.userId}`).set(JSON.stringify(value));
   }
 /************************************ ***********************************/
 
@@ -161,6 +168,13 @@ export class PayoutService {
     }).catch(e => {
       return Promise.reject(e);
     });
+  }
+
+  /**
+   * Save Stacy Chips in Database
+   */
+  saveStacyOrder(buyer, data) {
+    return this.afdb.list(`/stacyChipsOrders/${buyer}`).push(data);
   }
 }
 

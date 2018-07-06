@@ -28,20 +28,38 @@ export class ReturnBookComponent implements OnInit {
     const id  = this.route.snapshot.params['id'];
     const uid = this.payoutservice.userId;
 
-    console.log(uid);
-
-    console.log(id);
     if (uid) {
       this.bookDataService.getPurchasedBook(uid, id).subscribe(book => {
-          this.book = JSON.parse(book.payload.val());
-          console.log(book.payload.val());
-          this.bookDataService.getReturnAddress(this.book.uid).subscribe(address => {
-            console.log(address);
-            this.address = address;
-          });
+        this.book = JSON.parse(book.payload.val());
+
+        this.bookDataService.getReturnAddress(this.book.uid).subscribe(address => {
+          this.address = address;
+        });
       });
     }
   }
 
-  
+  onsubmit() {
+    if (!this.carrier || !this.code) {
+      return this.flashMessage.show('Choose a carrier and enter tracking code', {cssClass: 'alert-danger', timeout: 4000});
+    }
+
+    if (this.carrier === 'USPS') {
+      this.book.returnCarrierLink = 'https://tools.usps.com/go/TrackConfirmAction_input';
+    } else if (this.carrier === 'UPS') {
+      this.book.returnCarrierLink = 'https://www.ups.com/tracking/tracking.html';
+    } else if (this.carrier === 'Fedex') {
+      this.book.returnCarrierLink = 'https://www.fedex.com/apps/fedextrack/?action=track';
+    } else if (this.carrier === 'DHL Express') {
+      this.book.returnCarrierLink = 'http://www.dhl.com/en/express/tracking.html';
+    } else {
+      return this.flashMessage.show('Choose a carrier and enter tracking code', {cssClass: 'alert-danger', timeout: 4000});
+    }
+
+    this.book.requestRefunds = true;
+    this.book.isReturn = true;
+    this.book.returnCode = this.code;
+
+    this.bookDataService.updateBookSold(this.book.isbn, this.book, this.book.uid);
+  }
 }

@@ -66,7 +66,7 @@ export class SendBookComponent implements OnInit {
     this.bookDataService.sendCarrierCode(this.book.buyerUid, this.book.isbn, this.book);
 
     this.bookDataService.bookSold(this.book.isbn, this.book);
-    console.log(this.book);
+
     this.bookDataService.removeFromStore(this.book.isbn).then(() => {
       this.router.navigate(['/sell-book']);
     });

@@ -30,7 +30,7 @@
           <small style="color: rgb(0, 174, 255); text-decoration: underline">{{ book.email }}</small>
         </p>
         <p class="card-text p-0 m-0 mt-4"><strong>Price: {{book.price | currency: 0}}</strong></p>
-        <a class="card-text pb-0 mt-4" routerLink="/return-book/{{book.isbn}}">
+        <a class="card-text pb-0 mt-4" *ngIf="book.isSent && lessFiveDays && !book.refunded" routerLink="/return-book/{{book.isbn}}">
           <strong>Return your book</strong>
         </a>
       </div>

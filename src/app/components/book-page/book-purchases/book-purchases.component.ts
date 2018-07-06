@@ -20,6 +20,7 @@ export class BookPurchasesComponent implements OnInit, OnDestroy {
   book: Book;
   user: string;
   boughtTime;
+  lessFiveDays: boolean;
 
   constructor(
     public bkData: BooksDataService,
@@ -27,6 +28,7 @@ export class BookPurchasesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    const now = new Date().getTime();
     this.payoutService.auth().subscribe(auth => {
       if (auth) {
         this.user = auth.displayName;
@@ -34,6 +36,13 @@ export class BookPurchasesComponent implements OnInit, OnDestroy {
           this.purchasedBooks = [];
           for (const d of data){
             this.book = JSON.parse(d.payload.val());
+            const fiveDays = (now - this.book.boughtTime) / 1000;
+
+            if (fiveDays >= 432000) {
+              this.lessFiveDays = false;
+            } else {
+              this.lessFiveDays = true;
+            }
             this.boughtTime = new Date(this.book.boughtTime).toLocaleDateString();
             this.purchasedBooks.unshift(this.book);
           }

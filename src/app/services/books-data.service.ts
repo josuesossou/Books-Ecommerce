@@ -70,6 +70,13 @@ export class BooksDataService {
     return this.afdb.object(`/sellbooks/${this.userId}/soldBook/${id}`).set(JSON.stringify(book));
   }
 
+  updateBookSold(id, book: Book, uid) {
+    if (!this.auth) {
+      return;
+    }
+    return this.afdb.object(`/sellbooks/${uid}/soldBook/${id}`).set(JSON.stringify(book));
+  }
+
   // sold books
   getBookSold(id) {
     if (!this.auth) {
@@ -153,7 +160,7 @@ export class BooksDataService {
   getBuyerAddress(uid) {
     return this.afdb.object(`/address/${uid}`).valueChanges();
   }
-
+  // send carrier and tracking code
   sendCarrierCode(buyerid, bkid, book) {
     if (!this.auth) {
       return;
@@ -161,4 +168,7 @@ export class BooksDataService {
       return this.afdb.object(`/buyBooks/${buyerid}/${bkid}`).set(JSON.stringify(book));
   }
 
+  getRegisteredUsers() {
+    return this.afdb.list(`/registered/`).valueChanges();
+  }
 }

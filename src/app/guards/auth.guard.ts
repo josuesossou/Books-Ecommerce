@@ -20,17 +20,19 @@ export class AuthGuard implements CanActivate {
         if (!user || user.isAnonymous) {
             this.router.navigate(['/']);
             return false;
-        }
-
-        if (this.bUser !== undefined) {
-            if (this.bUser !== user.uid) {
-                this.router.navigate(['/']);
-                return false;
-            }else {
-                return true;
-            }
-        }else {
+        } else {
             return true;
         }
+
+        // if (this.bUser !== undefined) {
+        //     if (this.bUser !== user.uid) {
+        //         this.router.navigate(['/']);
+        //         return false;
+        //     } else {
+        //         return true;
+        //     }
+        // } else {
+        //     return true;
+        // }
     }
 }

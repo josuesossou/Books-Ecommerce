@@ -4,13 +4,13 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { environment } from '../../../../environments/environment.prod';
+// import { environment } from '../../../../environments/environment.prod';
 import { BooksDataService } from '../../../services/books-data.service';
 import { PayoutService } from '../../../services/payout.service';
 
 import { Book } from '../../../model/book';
 import { User } from '../../../model/book';
-import { Charges } from '../../../model/interface';
+// import { Charges } from '../../../model/interface';
 @Component({
   selector: 'app-buy-book',
   templateUrl: './buy-book.component.html',
@@ -67,14 +67,11 @@ export class BuyBookComponent implements OnInit, OnDestroy {
   setBook() {
     let formatPrice: number;
     let newFormatPrice;
-    let lastNumb;
     let now;
     let postedDate;
 
     this.bkDataSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
       this.book = JSON.parse(book.payload.val());
-      // slicing the image url from url()---> saved in firebase as url(http...)
-      lastNumb = this.book.image.length - 1;
 
       formatPrice = this.book.price * 100;
       newFormatPrice = formatPrice.toString().split('.');
@@ -87,6 +84,7 @@ export class BuyBookComponent implements OnInit, OnDestroy {
       this.loader = false;
     });
   }
+
   // fuction that checks if user login or not then runs funtions that confugure and open the stripecheckout view.
   buybook() {
     if (!this.book.sold) {
@@ -102,5 +100,4 @@ export class BuyBookComponent implements OnInit, OnDestroy {
     this.bkDataSubscription.unsubscribe();
     this.authSubscription.unsubscribe();
   }
-
 }

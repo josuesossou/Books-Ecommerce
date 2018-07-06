@@ -42,7 +42,9 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
   userInfo: User;
   userId;
   isbn;
+  splitIsbn;
   uid;
+  boughtStacyTime;
 
   constructor(
     public flashMessagesService: FlashMessagesService,
@@ -61,57 +63,76 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
 
     let formatPrice: number;
     let newFormatPrice;
-    // let lastNumb;
     let now;
     let postedDate;
-
-    this.bkSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
-      this.book = JSON.parse(book.payload.val());
-
-      if (!this.book) {
-        return this.router.navigate(['/']);
-      }
-
-      if (this.book.sold) {
-        return this.router.navigate(['/']);
-      }
-      formatPrice = this.book.price * 100;
-      newFormatPrice = formatPrice.toString().split('.');
-      this.price = newFormatPrice[0];
-      // formating book.time to a local date format
-      now = new Date().toLocaleString();
-      postedDate = new Date(this.book.time).toLocaleDateString();
-      // seting up a description that will be used to track the type of book the user paid for
-      this.description = `${now} - Bought ${this.book.title} | ${this.book.isbn} book from ${this.book.seller}. Posted on ${postedDate}`;
-      this.loader = false;
-    });
+    this.splitIsbn = this.isbn.split(' ');
 
     this.authSubscription = this.payoutService.auth().subscribe((auth) => {
       if (!auth || auth.isAnonymous) {
         this.router.navigate(['/']);
+        this.loader = false;
+        return;
+      } else if (this.splitIsbn[0] === 'stacy') {
+        now = new Date().toLocaleString();
+        this.boughtStacyTime = new Date().getTime();
+
+        console.log(this.boughtStacyTime);
+
+        this.description = `${now} - Bought Stacy's Chips | on uzbook.com on ${new Date().toLocaleDateString()}`;
+        this.price = this.splitIsbn[1] * 100,
+        this.loader = false;
       } else {
-        this.name = auth.displayName;
-        this.userId = auth.uid;
-        this.userEmail = auth.email;
+        this.bkSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
+          this.book = JSON.parse(book.payload.val());
+
+          if (!this.book) {
+            return this.router.navigate(['/']);
+          }
+
+          if (this.book.sold) {
+            return this.router.navigate(['/']);
+          }
+          formatPrice = this.book.price * 100;
+          newFormatPrice = formatPrice.toString().split('.');
+          this.price = newFormatPrice[0];
+          // formating book.time to a local date format
+          now = new Date().toLocaleString();
+          postedDate = new Date(this.book.time).toLocaleDateString();
+          // seting up a description that will be used to track the type of book the user paid for
+          this.description = `${now} - Bought ${this.book.title} |
+                               ${this.book.isbn} book from ${this.book.seller} on uzbook.com. Posted on ${postedDate}`;
+          this.loader = false;
+        });
       }
+
+      this.userId = auth.uid;
+      this.userEmail = auth.email;
     });
   }
 
   ngOnDestroy() {
     this.authSubscription.unsubscribe();
-    this.bkSubscription.unsubscribe();
+    if (this.bkSubscription) {
+      this.bkSubscription.unsubscribe();
+    }
   }
 
   updateClient({value, valid}: {value: Client, valid: boolean}) {
     if (!valid) {
       return;
     }
-    this.payoutService.clientAddress(this.userId, value).then(() => {
-      this.configureStripeCheckout();
-    });
+    if (this.splitIsbn[0] === 'stacy') {
+      this.payoutService.clientAddressStacys(this.userId, value).then(() => {
+        this.configureStripeCheckout(`Stacy's Chips`);
+      });
+    } else {
+      this.payoutService.clientAddress(this.userId, value).then(() => {
+        this.configureStripeCheckout(this.book.title);
+      });
+    }
   }
 
-  configureStripeCheckout() {
+  configureStripeCheckout(describe) {
     this.handler = StripeCheckout.configure({
       key: environment.stripekey,
       image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
@@ -121,7 +142,7 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
         this.payoutService.processBookPayment(token, this.price, this.description, this.userEmail);
       }
     });
-    this.handlePayment(this.name, this.book.title);
+    this.handlePayment(this.userEmail, describe);
   }
 
   handlePayment(name, describe) {
@@ -130,16 +151,19 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
       description: 'Buying ' + describe,
       amount: this.price
     });
-
-    this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
+    if (this.splitIsbn && this.splitIsbn[0] === 'stacy') {
+      this.router.navigate([`buy-book-process/${this.boughtStacyTime}/stacy/${this.userId}`]);
+    } else {
+      this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
+    }
   }
 
   @HostListener('window:popstate', ['$event'])
     onPopState() {
-      if (confirm('Must submit a mailing address')) {
+      if (confirm('Do you want to leave this page? Purchase will be canceled')) {
         return false;
       }else {
-        return false;
+        return true;
       }
     }
 }
