@@ -4,7 +4,7 @@ export interface Book {
     image?: string;
     isbn?: string;
     isbn13?: string;
-    overview?: string;
+    // overview?: string;
     title?: string;
     title_long?: string;
     price?: number;
@@ -27,6 +27,7 @@ export interface Book {
     returnCarrierLink?: string;
     isReturn?: boolean;
     returnCode?: string;
+    id?: string;
 }
 
 export interface Querry {

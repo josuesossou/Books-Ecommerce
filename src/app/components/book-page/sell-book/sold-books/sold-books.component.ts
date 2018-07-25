@@ -45,6 +45,7 @@ export class SoldBooksComponent implements OnInit, OnDestroy {
         });
       });
     });
+
   }
 
   ngOnDestroy() {

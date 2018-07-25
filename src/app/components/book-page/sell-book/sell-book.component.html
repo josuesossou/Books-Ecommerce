@@ -3,12 +3,13 @@
   <small class="mr-5 mt-5">Welcome {{userName | uppercase}}</small>
 
   <h2 class="mb-4">Search Books</h2>
+  <hr style="border: 2px solid black">
 
   <div class="row mt-5">
     <div class="col-12 card">
 
       <div class="card-head text-center pt-3">
-        <input type="text" class="col-md-10 form-control mx-auto" [(ngModel)]="inputText">
+        <input type="text" class="col-md-10 form-control mx-auto" [(ngModel)]="inputText" placeholder="Seach book by book ISBN, book title, or by author name">
       </div>
       <div class="card-body">
         <button class="btn btn-outline-primary btn-block col-md-9 mx-auto" type="button" (click)="onSearching()" [disabled]="loader">Search Book</button>
@@ -52,11 +53,7 @@
 
     </div>
 
-    <!-- <div class="test" [style.background]="background"></div> -->
-
   </div>
-
-  <hr height="3rem">
 
   <app-inventory></app-inventory>
 

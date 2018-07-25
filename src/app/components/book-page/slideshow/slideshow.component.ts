@@ -23,6 +23,7 @@ export class SlideshowComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(this.books);
     for (let i = 0; i < 9; i++) {
       this.book = this.books[i];
     }

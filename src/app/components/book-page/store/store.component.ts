@@ -32,76 +32,77 @@ export class StoreComponent implements OnInit, OnDestroy {
   uids: String[];
   loader: boolean;
   chipAmount = 1;
-  chipPrice = this.chipAmount * 5;
+  chipPrice = this.chipAmount * (2.75 + 2);
+  stacyChip = true;
 
   ngOnInit() {
     this.loader = true;
-    this.authSubscription = this.payoutService.auth().subscribe(auth => {
-      if (!auth) {
-        this.payoutService.loginAnonymously().then(() => {
-          this.getAllBooks();
-        });
-      } else {
-        this.getAllBooks();
-      }
-    });
+    // this.authSubscription = this.payoutService.auth().subscribe(auth => {
+    //   if (!auth) {
+    //     this.payoutService.loginAnonymously().then(() => {
+    //       this.getAllBooks();
+    //     });
+    //   } else {
+    //     this.getAllBooks();
+    //   }
+    // });
+    this.getBooks();
   }
 
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
-    this.booksSubscription.unsubscribe();
+    // this.authSubscription.unsubscribe();
+    // this.booksSubscription.unsubscribe();
     this.bookSubscription.unsubscribe();
   }
 
-  getAllBooks() {
-    this.booksSubscription = this.bkData.getUserIds().subscribe(data => {
-      this.uids = [];
-      for (const d of data) {
-        this.uids.push(d.key);
-      }
-      this.getBooks();
-    });
-  }
+  // getAllBooks() {
+  //   // this.booksSubscription = this.bkData.getUserIds().subscribe(data => {
+  //   //   this.uids = [];
+  //   //   for (const d of data) {
+  //   //     this.uids.push(d.key);
+  //   //   }
+  //   //   this.getBooks();
+  //   // });
+  // }
 
   getBooks() {
     this.books = [];
 
-    for (const id of this.uids) {
-      this.bookSubscription = this.bkData.getUserForSaleBooks(id).subscribe(data => {
-        for (const d of data) {
-          this.book = JSON.parse(d.payload.val());
+    this.bookSubscription = this.bkData.getForSaleBooks().subscribe((data: any) => {
+      this.books = data;
 
-          this.book.changePrice = false;
+      this.books.forEach(book => {
+        book.changePrice = false;
 
-          const lastNumb = this.book.image.length - 1;
-          this.book.image = this.book.image.slice(4, lastNumb);
+        const lastNumb = book.image.length - 1;
+        book.image = book.image.slice(4, lastNumb);
 
-          if (this.book.title_long.length > 23) {
-            this.book.title_long = this.book.title_long.slice(0, 23) + '...';
-          }
-
-          if (this.book.authors[0].length > 14) {
-            this.book.authors[0] = this.book.authors[0].slice(0, 14) + '...';
-          }
-          this.books.unshift(this.book);
+        if (book.title_long.length > 23) {
+          book.title_long = book.title_long.slice(0, 23) + '...';
         }
 
-        this.books.sort(function(a, b) {
-          return b.time - a.time;
-        });
-
-        this.loader = false;
+        if (book.authors[0].length > 14) {
+          book.authors[0] = book.authors[0].slice(0, 14) + '...';
+        }
       });
-    }
+
+      this.books.sort(function(a, b) {
+        return b.time - a.time;
+      });
+
+      console.log(data, this.books);
+      this.loader = false;
+    });
   }
 
   orderStacyChip() {
     if (this.payoutService.user.isAnonymous) {
+      console.log('ano');
       return this.flashMessage.show(`Please Login and try again`, {cssClass: 'alert-danger', timeout: 3000});
     }
 
-    if (this.chipAmount < 1 || this.chipAmount > 10) {
-      return this.flashMessage.show(`There is no order for 0 amount or less and more than 10`, {cssClass: 'alert-danger', timeout: 3000});
+    if (this.chipAmount < 1) {
+      return this.flashMessage.show(`Cannot order an amount lower than 0`, {cssClass: 'alert-danger', timeout: 3000});
     }
 
     this.router.navigate([`address/stacy ${this.chipPrice}/${this.payoutService.user.uid}`]);

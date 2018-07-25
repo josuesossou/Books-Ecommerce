@@ -57,7 +57,24 @@
     line-height: 160%;
 }
 
-.stacy-chip {
+.close-stacy {
+  position: absolute;
+  display: flex;
+  height: 20px;
+  width: 20px;
+  justify-content: center;
+  align-items: center;
+  top: 0.8rem;
+  left: 0.5rem;
+  color: rgba(32, 32, 32, 0.623);
+  border: 2px solid rgba(32, 32, 32, 0.623);
+  border-radius: 100%;
+  cursor: pointer;
+  font-size: 0.5em;
+  font-weight: bold;
+}
+
+.stacy-chip, .open-stacy-chip {
   position: absolute;
   background-color: white;
   top: 0;

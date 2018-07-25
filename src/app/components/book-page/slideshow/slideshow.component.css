@@ -1,30 +1,29 @@
 .wrapp {
   box-shadow: 0 2px 15px 2px rgba(0, 0, 0, 0.3)
 }
-carousel{
+carousel {
     margin: 0;
     padding: 0;
     height: 60vh;
 }
-slide{
+slide {
     min-height: 30rem;
     height: 30rem;
     margin: 0;
     padding: 0;
 }
-.row{
+.row {
     height: 30rem;
 }
-.my-caption{
+.my-caption {
     position: relative;
     margin:0;
     padding: 5rem;
 }
-.my-caption img{
+.my-caption img {
     position: relative;
     display: inline-block;
     top: 50%;
     transform: translateY(-50%);
     box-shadow: 0 0 17px 1px rgba(0, 0, 0, 0.2)
 }
-

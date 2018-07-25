@@ -6,11 +6,16 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "lint": "eslint"
   },
   "dependencies": {
+    "stripe": "^4.15.0",
     "firebase-admin": "~5.12.1",
     "firebase-functions": "^1.0.3"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "eslint": "^5.0.1"
+  }
 }

@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-const stripe = require('stripe')(functions.config().stripe.livekey)
+const stripe = require('stripe')(functions.config().stripe.token)
 
 // exports.turkeyStripeCharge = functions.database
 //                                 .ref('/payments/{userId}/{paymentId}')
@@ -11,7 +11,6 @@ const stripe = require('stripe')(functions.config().stripe.livekey)
 //   const payment = event.data.val();
 //   const userId = event.params.userId;
 //   const paymentId = event.params.paymentId;
-  
 
 //   // checks if payment exists or if it has already been charged
 //   if (!payment || payment.charge) return;
@@ -45,8 +44,8 @@ const stripe = require('stripe')(functions.config().stripe.livekey)
 
 exports.bookStripeCharge = functions.database
                                 .ref('/bookpayments/{userId}/{paymentId}')
-                                .onWrite((snap,context) => {
-  const payment = snap.val();
+                                .onWrite((change,context) => {
+  const payment = change.after.val();
   const userId = context.params.userId;
   const paymentId = context.params.paymentId;
   
@@ -74,5 +73,10 @@ exports.bookStripeCharge = functions.database
           admin.database()
           .ref(`/bookpayments/${userId}/${paymentId}/charge`)
           .set(charge)
+
+          return charge;
         })
+        .then(charge => {
+          
+        });
 });
