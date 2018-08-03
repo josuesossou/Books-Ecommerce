@@ -55,16 +55,16 @@ import { SendBookComponent } from './components/book-page/sell-book/send-book/se
 import { ReturnBookComponent } from './components/book-page/book-purchases/return-book/return-book.component';
 
 const appRoutes: Routes = [
-  {path: 'address/:isbn/:uid', component: RedirectAddressComponent, canActivate: [AuthGuard]},
+  {path: 'address/:id', component: RedirectAddressComponent, canActivate: [AuthGuard]},
   {path: 'sell-book', component: SellBookComponent, canActivate: [SellerAuthGuard]},
   {path: 'book-purchased', component: BookPurchasesComponent, canActivate: [BuyerAuthGuard]},
-  {path: 'buy-book/:uid/:isbn', component: BuyBookComponent},
+  {path: 'buy-book/:id', component: BuyBookComponent},
   {path: 'buy-book-process/:uid/:isbn/:bUser', component: BuyBookProccessComponent, canActivate: [AuthGuard]},
   {path: '', component: StoreComponent},
   {path: 'send-book/:id', component: SendBookComponent, canActivate: [AuthGuard]},
   {path: 'return-book/:id', component: ReturnBookComponent},
   {path: 'reset-password', component: PasswordResetComponent},
-  {path: 'buyer-login/:isbn/:uid', component: BuyerLoginComponent},
+  {path: 'buyer-login/:id', component: BuyerLoginComponent},
   {path: 'buyer-login', component: BuyerLoginComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},

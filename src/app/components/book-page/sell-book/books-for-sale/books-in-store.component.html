@@ -11,7 +11,7 @@
         <h6 class="card-text pt-0 mt-0 mb-0">Isbn: {{book.isbn}}</h6>
         <h5 class="card-text pt-0 mt-0 mb-0">{{ book.price | currency:0 }}</h5>
         <button class="btn btn-outline-primary btn-sm pt-0 mt-1 mb-0" (click)="book.changePrice = true" *ngIf="!book.sold">Change Price</button>
-        <button class="btn btn-outline-danger btn-sm pt-0 mb-0 mt-1" (click)="removeBck(book.isbn, book)" *ngIf="!book.sold">Cancel</button>
+        <button class="btn btn-outline-danger btn-sm pt-0 mb-0 mt-1" (click)="removeBck(book.id, book)" *ngIf="!book.sold">Cancel</button>
         <button class="btn btn-outline-danger btn-sm pt-0 mb-0 mt-1" *ngIf="book.sold" (click)="sendBook(book.isbn)">Send Book to Buyer</button>
       </div>  
       <div class="card-body" *ngIf="book.changePrice && !book.sold">

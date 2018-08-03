@@ -30,8 +30,8 @@ export class SendBookComponent implements OnInit {
     const uid = this.payoutservice.userId;
 
     console.log(id);
-    this.bookDataService.getForSaleBook(id, uid).subscribe(book => {
-      this.book = JSON.parse(book.payload.val());
+    this.bookDataService.getForSaleBook(id).then(bookSnapshot => {
+      this.book = bookSnapshot.val();
       console.log(this.book);
       this.bookDataService.getBuyerAddress(this.book.buyerUid).subscribe((address: any) => {
         this.address = JSON.parse(address);

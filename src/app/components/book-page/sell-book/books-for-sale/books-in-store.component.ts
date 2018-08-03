@@ -20,7 +20,7 @@ export class BooksInStoreComponent implements OnInit, OnDestroy {
   private getBooksSubscription: Subscription;
   private bkSubscription: Subscription;
 
-  forSale: Book[] = [];
+  forSale: Book[];
   book: Book;
 
   constructor(
@@ -34,6 +34,7 @@ export class BooksInStoreComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.bkSubscription = this.bkData.getUserForSaleBooks().subscribe(ids => {
+      this.forSale = [];
       ids.forEach((id: any) => {
         this.bkData.getUserForSaleBook(id).then(book => {
           this.forSale.push(book.val());
@@ -59,10 +60,10 @@ export class BooksInStoreComponent implements OnInit, OnDestroy {
   }
 
   removeBck(id, book) {
-    this.bkData.booksInventory(id, book);
-    this.bkData.removeFromStore(id).then(() => {
-      this.ngOnInit();
-    });
+    book.isForSale = false;
+
+    this.bkData.booksInventory(book.isbn, book);
+    this.bkData.removeFromStore(id);
   }
 
   sendBook(id) {

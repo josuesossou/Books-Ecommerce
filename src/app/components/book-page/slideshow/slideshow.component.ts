@@ -26,6 +26,10 @@ export class SlideshowComponent implements OnInit {
     console.log(this.books);
     for (let i = 0; i < 9; i++) {
       this.book = this.books[i];
+      // this.book.image = `url(${this.book.image})`;
+      // console.log(this.book.image);
+      // this.book.image = this.book.image.slice(3, this.book.image.length - 1);
+      // console.log(this.book.image);
     }
   }
 }

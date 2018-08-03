@@ -43,7 +43,7 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
   userId;
   isbn;
   splitIsbn;
-  uid;
+  id;
   boughtStacyTime;
 
   constructor(
@@ -59,55 +59,73 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loader = true;
     this.isbn = this.route.snapshot.paramMap.get('isbn');
-    this.uid = this.route.snapshot.paramMap.get('uid');
+    this.id = this.route.snapshot.paramMap.get('id');
 
     let formatPrice: number;
     let newFormatPrice;
     let now;
     let postedDate;
     this.splitIsbn = this.isbn.split(' ');
+    const auth = this.bkData.auth;
 
-    this.authSubscription = this.payoutService.auth().subscribe((auth) => {
-      if (!auth || auth.isAnonymous) {
-        this.router.navigate(['/']);
-        this.loader = false;
-        return;
-      } else if (this.splitIsbn[0] === 'stacy') {
-        now = new Date().toLocaleString();
-        this.boughtStacyTime = new Date().getTime();
+    if (auth.isAnonymous) {
+      this.router.navigate(['/']);
+      this.loader = false;
+      return;
+    }
 
-        console.log(this.boughtStacyTime);
+    if (this.splitIsbn[0] === 'stacy') {
+      now = new Date().toLocaleString();
+      this.boughtStacyTime = new Date().getTime();
 
-        this.description = `${now} - Bought Stacy's Chips | on uzbook.com on ${new Date().toLocaleDateString()}`;
-        this.price = this.splitIsbn[1] * 100,
-        this.loader = false;
-      } else {
-        this.bkSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(book => {
-          this.book = JSON.parse(book.payload.val());
+      console.log(this.boughtStacyTime);
 
-          if (!this.book) {
-            return this.router.navigate(['/']);
-          }
+      this.description = `${now} - Bought Stacy's Chips | on uzbook.com on ${new Date().toLocaleDateString()}`;
+      this.price = this.splitIsbn[1] * 100,
+      this.loader = false;
+    };
 
-          if (this.book.sold) {
-            return this.router.navigate(['/']);
-          }
-          formatPrice = this.book.price * 100;
-          newFormatPrice = formatPrice.toString().split('.');
-          this.price = newFormatPrice[0];
-          // formating book.time to a local date format
-          now = new Date().toLocaleString();
-          postedDate = new Date(this.book.time).toLocaleDateString();
-          // seting up a description that will be used to track the type of book the user paid for
-          this.description = `${now} - Bought ${this.book.title} |
-                               ${this.book.isbn} book from ${this.book.seller} on uzbook.com. Posted on ${postedDate}`;
-          this.loader = false;
-        });
-      }
+    // this.authSubscription = this.payoutService.auth().subscribe((auth) => {
+    //   if (!auth || auth.isAnonymous) {
+    //     this.router.navigate(['/']);
+    //     this.loader = false;
+    //     return;
+    //   } else if (this.splitIsbn[0] === 'stacy') {
+    //     now = new Date().toLocaleString();
+    //     this.boughtStacyTime = new Date().getTime();
 
-      this.userId = auth.uid;
-      this.userEmail = auth.email;
-    });
+    //     console.log(this.boughtStacyTime);
+
+    //     this.description = `${now} - Bought Stacy's Chips | on uzbook.com on ${new Date().toLocaleDateString()}`;
+    //     this.price = this.splitIsbn[1] * 100,
+    //     this.loader = false;
+    //   } else {
+    //     this.bkData.getForSaleBook(this.id).then(book => {
+    //       this.book = JSON.parse(book.payload.val());
+
+    //       if (!this.book) {
+    //         return this.router.navigate(['/']);
+    //       }
+
+    //       if (this.book.sold) {
+    //         return this.router.navigate(['/']);
+    //       }
+    //       formatPrice = this.book.price * 100;
+    //       newFormatPrice = formatPrice.toString().split('.');
+    //       this.price = newFormatPrice[0];
+    //       // formating book.time to a local date format
+    //       now = new Date().toLocaleString();
+    //       postedDate = new Date(this.book.time).toLocaleDateString();
+    //       // seting up a description that will be used to track the type of book the user paid for
+    //       this.description = `${now} - Bought ${this.book.title} |
+    //                            ${this.book.isbn} book from ${this.book.seller} on uzbook.com. Posted on ${postedDate}`;
+    //       this.loader = false;
+    //     });
+    //   }
+
+    //   this.userId = auth.uid;
+    //   this.userEmail = auth.email;
+    // });
   }
 
   ngOnDestroy() {
@@ -154,7 +172,7 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
     if (this.splitIsbn && this.splitIsbn[0] === 'stacy') {
       this.router.navigate([`buy-book-process/${this.boughtStacyTime}/stacy/${this.userId}`]);
     } else {
-      this.router.navigate([`buy-book-process/${this.uid}/${this.isbn}/${this.userId}`]);
+      this.router.navigate([`buy-book-process/${this.id}/${this.isbn}/${this.userId}`]);
     }
   }
 

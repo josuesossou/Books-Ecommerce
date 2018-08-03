@@ -3,6 +3,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { Client, UserData } from '../model/interface';
+import { Book } from '../model/book';
 
 @Injectable()
 export class PayoutService {
@@ -28,11 +29,15 @@ export class PayoutService {
     return this.afdb.list(`/payments/${this.userId}`).push(payment);
   }
 
-  processBookPayment(token: any, amount: number, description: string, receipt_email: string) {
+  processBookPayment(token: any, amount: number, description: string, receipt_email: string, book: Book) {
     console.log(token);
     this.token = token.id;
     const payment = { token , amount, description, receipt_email};
-    return this.afdb.list(`/bookpayments/${this.userId}`).push(payment);
+    const bookPayement = {
+      payment,
+      book
+    };
+    return this.afdb.list(`/bookpayments/${this.userId}`).push(bookPayement);
   }
   /// from buy-book-proccess
   getAllBckPurchases(user) {

@@ -158,11 +158,12 @@ export class BooksDataService {
   }
 
   // getting one book data to the buy-book page
-  getForSaleBook(isbn, uid) {
+  getForSaleBook(id) {
     if (!this.auth) {
       return;
     }
-    return this.afdb.object(`/sellbooks/${uid}/forSale/${isbn}`).snapshotChanges();
+    console.log(id);
+    return this.afdb.list(`/bookForSale/${id}`).query.once('value');
   }
 
   // removing a particular book from the user inventory node in Firebase
@@ -178,7 +179,8 @@ export class BooksDataService {
     if (!this.auth) {
       return;
     }
-    return this.afdb.list(`/sellbooks/${this.userId}/forSale/${id}`).remove();
+    this.afdb.list(`/bookForSale/${id}`).remove();
+    return this.afdb.list(`/userBooks/${this.userId}/forSale/${id}`).remove();
   }
 
   getBuyerAddress(uid) {
