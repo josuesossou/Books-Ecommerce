@@ -12,19 +12,19 @@ export class BooksDataService {
   email: string;
   auth;
 
-  constructor(
+  constructor (
     private afdb: AngularFireDatabase,
     private afAuth: AngularFireAuth) {
-      this.afAuth.authState.subscribe((auth) => {
-        this.auth = auth;
-        if (!auth || auth.isAnonymous) {
-          return;
-        }
+    this.afAuth.authState.subscribe((auth) => {
+      this.auth = auth;
+      if (!auth || auth.isAnonymous) {
+        return;
+      }
 
-        this.userId = auth.uid;
-        this.userName = auth.displayName;
-        this.email = auth.email;
-      });
+      this.userId = auth.uid;
+      this.userName = auth.displayName;
+      this.email = auth.email;
+    });
   }
 
   // push books owned by the user to the inventory
@@ -141,13 +141,12 @@ export class BooksDataService {
   }
 
   getUserForSaleBook({ id }) {
-
     return this.afdb.list(`/bookForSale/${id}`).query
     .once('value');
   }
 
   getForSaleBooks() {
-      return this.afdb.list(`/bookForSale`).valueChanges();
+    return this.afdb.list(`/bookForSale`).valueChanges();
   }
   // getting all the users uids in firebase and used them to get the all the books using getForSaleBooks
   getUserIds() {

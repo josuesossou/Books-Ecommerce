@@ -94,21 +94,6 @@
             <div *ngIf = "businessName.errors?.required && businessName.touched" class="invalid-feedback">  Business name  is required</div>
           </div>
 
-          <!-- Stripe account Id -->
-          <div class="form-group">
-            <label>Stripe Account Id</label>
-            <input type="text"
-            [(ngModel)]="stripeId" 
-            placeholder="Enter stripe id"
-            #stripeAccountId = "ngModel"
-            [ngClass]="{'is-invalid': stripeAccountId.errors?.required && stripeAccountId.touched}"
-            name="stripeAccountId" 
-            class="form-control"
-            required>
-            <small class="form-text text-muted ml-0 text-left">You need to have a stripe account to register. Enter your stripe id here.</small>
-            <div *ngIf = "stripeAccountId.errors?.required && stripeAccountId.touched" class="invalid-feedback">  Business name  is required</div>
-          </div>
-
           <!-- address-line1 input-->
           <div class="form-group">
             <label for="addLine1">Address Line 1</label>

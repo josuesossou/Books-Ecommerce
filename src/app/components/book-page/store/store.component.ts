@@ -37,20 +37,19 @@ export class StoreComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loader = true;
-    // this.authSubscription = this.payoutService.auth().subscribe(auth => {
-    //   if (!auth) {
-    //     this.payoutService.loginAnonymously().then(() => {
-    //       this.getAllBooks();
-    //     });
-    //   } else {
-    //     this.getAllBooks();
-    //   }
-    // });
-    this.getBooks();
+    this.authSubscription = this.payoutService.auth().subscribe(auth => {
+      if (!auth) {
+        this.payoutService.loginAnonymously().then(() => {
+          this.getBooks();
+        });
+      } else {
+        this.getBooks();
+      }
+    });
   }
 
   ngOnDestroy() {
-    // this.authSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
     // this.booksSubscription.unsubscribe();
     this.bookSubscription.unsubscribe();
   }
@@ -105,6 +104,6 @@ export class StoreComponent implements OnInit, OnDestroy {
       return this.flashMessage.show(`Cannot order an amount lower than 0`, {cssClass: 'alert-danger', timeout: 3000});
     }
 
-    this.router.navigate([`address/stacy ${this.chipPrice}/${this.payoutService.user.uid}`]);
+    this.router.navigate([`address/stacy ${this.chipPrice}`]);
   }
 }

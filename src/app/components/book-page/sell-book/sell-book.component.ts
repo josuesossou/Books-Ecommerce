@@ -33,13 +33,13 @@ export class SellBookComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.authSubscription = this.payoutService.auth().subscribe(auth => {
-      this.userName = auth.displayName;
-    });
+    // this.authSubscription = this.payoutService.auth().subscribe(auth => {
+      this.userName = this.payoutService.user.displayName;
+    // });
   }
 
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
+    // this.authSubscription.unsubscribe();
   }
 
   // search for books on Isbn

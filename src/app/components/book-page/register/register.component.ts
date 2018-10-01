@@ -47,7 +47,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit({value, valid}: {value: Object, valid: boolean}) {
-    console.log(value);
     if (!valid) {
       return this.flashMessage.show('Please fill out the form', {cssClass: 'alert-danger', timeout: 5000});
     }
@@ -66,7 +65,7 @@ export class RegisterComponent implements OnInit {
       };
 
       this.payoutService.register(this.email, this.password, this.business, userData)
-        .then(res => {
+        .then(() => {
           this.flashMessage.show('A verification Email has been sent. Important! Verify your account before Login in',
                                  {cssClass: 'alert-success ', timout: 9000});
           this.router.navigate(['/login']);
@@ -91,11 +90,9 @@ export class RegisterComponent implements OnInit {
             this.loader = false;
           }
         });
-
     } else {
       this.passwordDonMatch = true;
       this.loader = false;
     }
   }
-
 }

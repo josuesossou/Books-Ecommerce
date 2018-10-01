@@ -63,7 +63,7 @@ export class BuyBookProccessComponent implements OnInit, OnDestroy {
   }
 
   proccessBuyBook() {
-    this.token = this.payoutService.token;
+    this.token = '';
 
     if (this.isbn === 'stacy') {
       this.puchaseSubscription = this.payoutService.getAllBckPurchases(this.buyerUser).subscribe((charges: Payment[]) => {
@@ -106,7 +106,7 @@ export class BuyBookProccessComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.bkdataSubscription = this.bkData.getForSaleBook(this.isbn, this.uid).subscribe(b => {
+    this.bkData.getForSaleBook(this.isbn).then(b => {
       const book: Book = JSON.parse(b.payload.val());
       // const postedDate = new Date(book.time).toLocaleDateString();
       // const description = `${book.isbn} book from ${book.seller} on uzbook.com. Posted on ${postedDate}`;

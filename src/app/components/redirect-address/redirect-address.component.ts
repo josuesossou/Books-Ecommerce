@@ -45,6 +45,8 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
   splitIsbn;
   id;
   boughtStacyTime;
+  isComplete = false;
+  showComplete = false;
 
   constructor(
     public flashMessagesService: FlashMessagesService,
@@ -52,20 +54,18 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
     public payoutService: PayoutService,
     public bkData: BooksDataService,
     public route: ActivatedRoute,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     this.loader = true;
-    this.isbn = this.route.snapshot.paramMap.get('isbn');
+    // this.isbn = this.route.snapshot.paramMap.get('isbn');
     this.id = this.route.snapshot.paramMap.get('id');
 
     let formatPrice: number;
     let newFormatPrice;
     let now;
     let postedDate;
-    this.splitIsbn = this.isbn.split(' ');
+    this.splitIsbn = this.id.split(' ');
     const auth = this.bkData.auth;
 
     if (auth.isAnonymous) {
@@ -83,7 +83,30 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
       this.description = `${now} - Bought Stacy's Chips | on uzbook.com on ${new Date().toLocaleDateString()}`;
       this.price = this.splitIsbn[1] * 100,
       this.loader = false;
-    };
+    } else {
+      this.bkData.getForSaleBook(this.id).then(book => {
+        this.book = book.val();
+
+        if (!this.book) {
+          return this.router.navigate(['/']);
+        }
+
+        if (this.book.sold) {
+          return this.router.navigate(['/']);
+        }
+
+        formatPrice = this.book.price * 100;
+        newFormatPrice = formatPrice.toString().split('.');
+        this.price = newFormatPrice[0];
+        // formating book.time to a local date format
+        now = new Date().toLocaleString();
+        postedDate = new Date(this.book.time).toLocaleDateString();
+        // seting up a description that will be used to track the type of book the user paid for
+        this.description = `${now} - Bought ${this.book.title} |
+                              ${this.book.isbn} book from ${this.book.seller} on uzbook.com. Posted on ${postedDate}`;
+        this.loader = false;
+      });
+    }
 
     // this.authSubscription = this.payoutService.auth().subscribe((auth) => {
     //   if (!auth || auth.isAnonymous) {
@@ -129,10 +152,10 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
-    if (this.bkSubscription) {
-      this.bkSubscription.unsubscribe();
-    }
+  //   this.authSubscription.unsubscribe();
+  //   if (this.bkSubscription) {
+  //     this.bkSubscription.unsubscribe();
+  //   }
   }
 
   updateClient({value, valid}: {value: Client, valid: boolean}) {
@@ -140,11 +163,13 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.splitIsbn[0] === 'stacy') {
+      this.showComplete = true;
       this.payoutService.clientAddressStacys(this.userId, value).then(() => {
         this.configureStripeCheckout(`Stacy's Chips`);
       });
     } else {
       this.payoutService.clientAddress(this.userId, value).then(() => {
+        this.showComplete = true;
         this.configureStripeCheckout(this.book.title);
       });
     }
@@ -157,7 +182,7 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
       locale: 'auto',
       email: this.userEmail,
       token: token => {
-        this.payoutService.processBookPayment(token, this.price, this.description, this.userEmail);
+        this.payoutService.processBookPayment(token, this.price, this.description, this.userEmail, this.id);
       }
     });
     this.handlePayment(this.userEmail, describe);
@@ -169,11 +194,14 @@ export class RedirectAddressComponent implements OnInit, OnDestroy {
       description: 'Buying ' + describe,
       amount: this.price
     });
-    if (this.splitIsbn && this.splitIsbn[0] === 'stacy') {
-      this.router.navigate([`buy-book-process/${this.boughtStacyTime}/stacy/${this.userId}`]);
-    } else {
-      this.router.navigate([`buy-book-process/${this.id}/${this.isbn}/${this.userId}`]);
-    }
+
+    setTimeout(() => {
+      this.isComplete = true;
+    }, 5000);
+  }
+
+  completePurchase() {
+    this.router.navigate([`/buy-book-process/${this.id}`]);
   }
 
   @HostListener('window:popstate', ['$event'])

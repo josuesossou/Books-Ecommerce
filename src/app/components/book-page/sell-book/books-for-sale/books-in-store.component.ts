@@ -17,7 +17,7 @@ import { Book } from '../../../../model/book';
 })
 export class BooksInStoreComponent implements OnInit, OnDestroy {
 
-  private getBooksSubscription: Subscription;
+  // private getBooksSubscription: Subscription;
   private bkSubscription: Subscription;
 
   forSale: Book[];
@@ -45,7 +45,7 @@ export class BooksInStoreComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.bkSubscription.unsubscribe();
-    this.getBooksSubscription.unsubscribe();
+    // this.getBooksSubscription.unsubscribe();
   }
 
   changePrice(book) {

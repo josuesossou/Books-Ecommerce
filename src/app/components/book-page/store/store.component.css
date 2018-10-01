@@ -2,12 +2,13 @@
     background-color: white;
     border-radius: .9rem .9rem 0 0;
     padding: 3rem 2rem;
-    margin-top: 100px;
+    /* margin-top: 100px; */
 }
 .books-collection{
     background-color: rgba(250, 228, 186,.7);
     min-height: 100vh;
     margin: 0;
+    padding: 0;
 }
 .card{
     padding: 0 ;
@@ -87,6 +88,8 @@
   flex-direction: row;
   display: flex;
   flex-wrap: wrap;
+  z-index: 100;
+  margin-top: 80px;
 }
 .stacy-chip-image {
   height: 100px;

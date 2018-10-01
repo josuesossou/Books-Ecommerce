@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<div class="books-collection pb-5" *ngIf="!loader">
+<div class="books-collection" *ngIf="!loader">
   <app-slideshow [books]="books"></app-slideshow>
 
   <div class="open-stacy-chip" style="cursor: pointer;" *ngIf="!stacyChip" (click)="stacyChip = !stacyChip">
@@ -31,8 +31,7 @@
     <div class="amount-order p-1" style="margin: 1rem">
       <small>Enter the number of chips you want to order</small><br>
       <input type="number" [(ngModel)]="chipAmount" min="1" /><br>
-      <small><strong>Price of a Stacy's:</strong> $2.75 {{ chipAmount }} + <strong>Shiping and handling:</strong> $2 x {{ chipAmount }}</small><br>
-      <small><strong>You'll Pay:</strong> {{ chipAmount * (2.75 + 2) | currency: 0 }} – <strong>You Order:</strong> {{ chipAmount }} Stacy's Chips</small>
+      <small><strong>Price of a Stacy's:</strong> $2.75 x {{ chipAmount }} + <strong>Shiping and handling:</strong> $2 x {{ chipAmount }}</small><br>
     </div>
     <button class="btn btn-success btn-sm" (click)="orderStacyChip()">ORDER NOW!</button>
   </div>

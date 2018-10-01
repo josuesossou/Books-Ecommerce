@@ -9,7 +9,6 @@ import { Book } from '../model/book';
 export class PayoutService {
   userId: string;
   user;
-  token;
 
   constructor(
     private afdb: AngularFireDatabase,
@@ -29,19 +28,20 @@ export class PayoutService {
     return this.afdb.list(`/payments/${this.userId}`).push(payment);
   }
 
-  processBookPayment(token: any, amount: number, description: string, receipt_email: string, book: Book) {
-    console.log(token);
-    this.token = token.id;
-    const payment = { token , amount, description, receipt_email};
-    const bookPayement = {
-      payment,
-      book
-    };
-    return this.afdb.list(`/bookpayments/${this.userId}`).push(bookPayement);
+  processBookPayment(token: any, amount: number, description: string, receipt_email: string, id) {
+    const payment = { token , amount, description, receipt_email, id};
+    return this.afdb.list(`/bookpayments/${this.userId}`).push(payment);
   }
   /// from buy-book-proccess
   getAllBckPurchases(user) {
     return this.afdb.list(`/bookpayments/${user}`).valueChanges();
+  }
+
+  getItemPurchased(id) {
+    return this.afdb.object(`/bookpayments/${this.userId}`)
+            .query.orderByChild('id')
+            .equalTo(id)
+            .once('value');
   }
 
   loginWithEmailAndPassword(email: string, password: string, buyer: boolean) {
@@ -100,11 +100,11 @@ export class PayoutService {
 
   // submiting an address on the redirect-address page
   clientAddress(id: String, value: Client) {
-    return this.afdb.object(`/address/${id}`).set(JSON.stringify(value));
+    return this.afdb.object(`/address/${this.userId}`).set(value);
   }
 
   clientAddressStacys(id: String, value: Client) {
-    return this.afdb.object(`/stacyChipsAddress/${this.userId}`).set(JSON.stringify(value));
+    return this.afdb.object(`/stacyChipsAddress/${this.userId}`).set(value);
   }
 /************************************ ***********************************/
 

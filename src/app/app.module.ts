@@ -59,7 +59,7 @@ const appRoutes: Routes = [
   {path: 'sell-book', component: SellBookComponent, canActivate: [SellerAuthGuard]},
   {path: 'book-purchased', component: BookPurchasesComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buy-book/:id', component: BuyBookComponent},
-  {path: 'buy-book-process/:uid/:isbn/:bUser', component: BuyBookProccessComponent, canActivate: [AuthGuard]},
+  // {path: 'buy-book-process/:id', component: BuyBookProccessComponent, canActivate: [AuthGuard]},
   {path: '', component: StoreComponent},
   {path: 'send-book/:id', component: SendBookComponent, canActivate: [AuthGuard]},
   {path: 'return-book/:id', component: ReturnBookComponent},
